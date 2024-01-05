@@ -9,7 +9,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import org.controlsfx.control.Rating?>
 
 <AnchorPane prefHeight="505.0" prefWidth="507.0" styleClass="backgroundAnchor" stylesheets="@style2.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MovieController">
    <children>
@@ -40,7 +39,6 @@
       <ListView fx:id="selectedCategories" layoutX="204.0" layoutY="259.0" prefHeight="93.0" prefWidth="176.0" stylesheets="@style2.css" />
       <Button fx:id="removeCategory" layoutX="403.0" layoutY="259.0" mnemonicParsing="false" onAction="#removeCategoryButton" styleClass="removeCategory" stylesheets="@style2.css" text="Remove" textFill="WHITE" />
       <Button fx:id="openFile" layoutX="390.0" layoutY="95.0" mnemonicParsing="false" onAction="#openFileButton" styleClass="openFileButton" stylesheets="@style2.css" text="...." textFill="WHITE" />
-      <Rating fx:id="personalRating" layoutX="204.0" layoutY="388.0" rating="0.0" stylesheets="@style.css" />
       <TextField fx:id="filePath" alignment="CENTER" layoutX="204.0" layoutY="96.0" styleClass="filePathInput-box" stylesheets="@style2.css">
          <opaqueInsets>
             <Insets />
