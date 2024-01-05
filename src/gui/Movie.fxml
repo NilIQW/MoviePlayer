@@ -6,22 +6,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
+<?import org.controlsfx.control.Rating?>
 
 
 <AnchorPane prefHeight="505.0" prefWidth="507.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Movie">
    <children>
-      <Text layoutX="66.0" layoutY="96.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Title" />
-      <Text layoutX="65.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
-      <Text layoutX="66.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Categories" />
-      <Text layoutX="72.0" layoutY="382.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Personal Rating" />
-      <Text layoutX="73.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File path" />
-      <TextField fx:id="movieTitle" layoutX="213.0" layoutY="79.0" />
-      <Button fx:id="newCategory" layoutX="147.0" layoutY="164.0" mnemonicParsing="false" onAction="#newCategoryButton" text="New" />
-      <ChoiceBox fx:id="categoryChoice" layoutX="213.0" layoutY="164.0" prefWidth="150.0" />
-      <Button layoutX="399.0" layoutY="164.0" mnemonicParsing="false" text="Add" />
-      <ListView fx:id="selectedCategories" layoutX="213.0" layoutY="235.0" prefHeight="93.0" prefWidth="149.0" />
-      <Button fx:id="removeCategory" layoutX="399.0" layoutY="257.0" mnemonicParsing="false" onAction="#removeCategoryButton" text="Remove" />
-      <TextField fx:id="filePath" layoutX="213.0" layoutY="424.0" />
-      <Button fx:id="openFile" layoutX="405.0" layoutY="424.0" mnemonicParsing="false" onAction="#openFileButton" text="...." />
+      <Text layoutX="83.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Title" />
+      <Text layoutX="88.0" layoutY="218.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Category" />
+      <Text layoutX="59.0" layoutY="292.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected Categories" />
+      <Text layoutX="70.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Personal Rating" />
+      <Text layoutX="90.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="File path" />
+      <TextField fx:id="movieTitle" layoutX="191.0" layoutY="128.0" />
+      <Button fx:id="newCategory" layoutX="144.0" layoutY="201.0" mnemonicParsing="false" onAction="#newCategoryButton" text="New" />
+      <ChoiceBox fx:id="categoryChoice" layoutX="191.0" layoutY="201.0" prefWidth="150.0" />
+      <Button fx:id="saveMovie" layoutX="380.0" layoutY="201.0" mnemonicParsing="false" onAction="#saveMovieButton" text="Add" />
+      <ListView fx:id="selectedCategories" layoutX="191.0" layoutY="260.0" prefHeight="93.0" prefWidth="149.0" />
+      <Button fx:id="removeCategory" layoutX="369.0" layoutY="260.0" mnemonicParsing="false" onAction="#removeCategoryButton" text="Remove" />
+      <TextField fx:id="filePath" layoutX="191.0" layoutY="64.0" />
+      <Button fx:id="openFile" layoutX="386.0" layoutY="64.0" mnemonicParsing="false" onAction="#openFileButton" text="...." />
+      <Rating fx:id="personalRating" layoutX="178.0" layoutY="388.0" rating="0.0" />
+      <Button fx:id="saveMovie" layoutX="392.0" layoutY="448.0" mnemonicParsing="false" onAction="#saveMovieButton" text="Save" />
    </children>
 </AnchorPane>
