@@ -47,7 +47,7 @@
       </TextField>
       <HBox alignment="CENTER" layoutY="-2.0" prefHeight="73.0" prefWidth="508.0" styleClass="backgroundMovie" stylesheets="@style2.css">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie  ´´´´">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie  ´´´?????´">
                <font>
                   <Font name="Cambria Bold" size="21.0" />
                </font>
