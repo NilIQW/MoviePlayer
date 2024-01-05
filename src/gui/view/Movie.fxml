@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane prefHeight="505.0" prefWidth="507.0" styleClass="backgroundAnchor" stylesheets="@style2.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MovieController">
+<AnchorPane prefHeight="505.0" prefWidth="507.0" styleClass="backgroundAnchor" stylesheets="@style2.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MovieController">
    <children>
       <Text fill="WHITE" layoutX="69.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie Title">
          <font>
@@ -35,7 +35,7 @@
          </font></Text>
       <TextField fx:id="movieTitle" alignment="CENTER" layoutX="204.0" layoutY="145.0" styleClass="movieNameInput" stylesheets="@style2.css" />
       <Button fx:id="newCategory" layoutX="383.0" layoutY="201.0" mnemonicParsing="false" onAction="#newCategoryButton" styleClass="newCategory" stylesheets="@style2.css" text="New" textFill="WHITE" />
-      <ChoiceBox fx:id="categoryChoice" layoutX="204.0" layoutY="201.0" prefWidth="150.0" stylesheets="@style2.css" />
+      <ChoiceBox fx:id="categoryChoice" layoutX="204.0" layoutY="201.0" prefHeight="26.0" prefWidth="160.0" style="-fx-background-color: #FF000050;" />
       <Button fx:id="addCategory" layoutX="433.0" layoutY="201.0" mnemonicParsing="false" onAction="#addCategoryButton" styleClass="addCategory" stylesheets="@style2.css" text="Add" textFill="WHITE" />
       <ListView fx:id="selectedCategories" layoutX="204.0" layoutY="259.0" prefHeight="93.0" prefWidth="176.0" style="-fx-background-color: #FF000050;" />
       <Button fx:id="removeCategory" layoutX="403.0" layoutY="259.0" mnemonicParsing="false" onAction="#removeCategoryButton" styleClass="removeCategory" stylesheets="@style2.css" text="Remove" textFill="WHITE" />
@@ -47,7 +47,7 @@
       </TextField>
       <HBox alignment="CENTER" layoutY="-2.0" prefHeight="73.0" prefWidth="508.0" styleClass="backgroundMovie" stylesheets="@style2.css">
          <children>
-            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie  ´´´?????´">
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Movie  ">
                <font>
                   <Font name="Cambria Bold" size="21.0" />
                </font>
