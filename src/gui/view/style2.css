@@ -1,0 +1,52 @@
+.filePathInput-box{
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 100;
+}
+
+.backgroundAnchor{
+    -fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117));
+
+}
+
+.backgroundMovie{
+    -fx-background-color:  #212121;
+
+}
+.movieNameInput{
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 100;
+
+}
+.choice-box{
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 100;
+
+}
+.list-view {
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 20;
+}
+.openFileButton {
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 10;
+}
+.newCategory {
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 10;
+}
+.addCategory {
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 10;
+}
+.removeCategory {
+    -fx-background-color: #ef4a4a;
+    -fx-background-radius: 10;
+}
+.saveBox {
+    -fx-background-color: #2a363b;
+    -fx-background-radius: 10;
+}
+.save {
+    -fx-background-color: #2a363b;
+    -fx-background-radius: 10;
+}
