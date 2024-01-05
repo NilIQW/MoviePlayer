@@ -2,7 +2,7 @@ package gui.controller;
 
 import javafx.event.ActionEvent;
 
-public class mainController {
+public class MainController {
     public void addMovieButton(ActionEvent actionEvent) {
     }
 }
