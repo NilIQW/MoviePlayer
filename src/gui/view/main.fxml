@@ -7,29 +7,86 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane prefHeight="608.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117));" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
+<AnchorPane prefHeight="599.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117)); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
    <children>
-      <ListView fx:id="CategoryListview" layoutX="21.0" layoutY="164.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040;" />
-      <TableView fx:id="MoviesTableview" layoutX="206.0" layoutY="164.0" prefHeight="430.0" prefWidth="301.0" style="-fx-background-color: #FF000040;">
+      <HBox alignment="CENTER" layoutY="-2.0" prefHeight="54.0" prefWidth="877.0" style="-fx-background-color: #212121;">
+         <children>
+            <Label fx:id="searchButton" text="🔍  " textFill="#ccc5c5" />
+            <TextField fx:id="search" alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="145.0" style="-fx-background-color: #393e46;" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="39.0" prefWidth="74.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="       Movie">
+               <font>
+                  <Font name="Cambria Bold" size="15.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <ListView fx:id="CategoryListview" layoutX="21.0" layoutY="136.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" />
+      <HBox layoutX="11.0" layoutY="28.0" prefHeight="48.0" prefWidth="17.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Library" wrappingWidth="51.17612075805664">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+         </children>
+      </HBox>
+      <TableView fx:id="MoviesTableview" layoutX="206.0" layoutY="136.0" prefHeight="430.0" prefWidth="301.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;">
         <columns>
-          <TableColumn prefWidth="75.0" text="Title" />
-          <TableColumn prefWidth="75.0" text="Rating" />
-            <TableColumn prefWidth="75.0" text="Category" />
-            <TableColumn prefWidth="75.0" text="Last View" />
+          <TableColumn fx:id="titleColumn" prefWidth="75.0" style="-fx-background-color: #ef4a4a;" text="Title" />
+          <TableColumn prefWidth="75.0" style="-fx-background-color: #ef4a4a;" text="Rating" />
+            <TableColumn prefWidth="75.0" style="-fx-background-color: #ef4a4a;" text="Category" />
+            <TableColumn prefWidth="75.0" style="-fx-background-color: #ef4a4a;" text="Last View" />
         </columns>
       </TableView>
-      <Label layoutX="658.0" layoutY="351.0" text="Rating:" />
+      <Label layoutX="658.0" layoutY="351.0" text="Rating:">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font></Label>
       <Label layoutX="617.0" layoutY="256.0" text="Selected movie name:" />
-      <Label fx:id="searchButton" layoutX="21.0" layoutY="23.0" text="🔍" />
-      <TextField fx:id="search" layoutX="46.0" layoutY="19.0" prefHeight="26.0" prefWidth="145.0" />
-      <Button fx:id="addMovie" layoutX="21.0" layoutY="110.0" mnemonicParsing="false" onAction="#addMovieButton" style="-fx-background-color: #FF000040;" text="Add movie" />
-      <Label layoutX="21.0" layoutY="147.0" text="Category" />
-      <Label layoutX="206.0" layoutY="147.0" text="Movies" />
+      <Button fx:id="addMovie" layoutX="27.0" layoutY="65.0" mnemonicParsing="false" onAction="#addMovieButton" style="-fx-background-color: #FF000040; -fx-background-radius: 10;" text="Add movie" />
+      <Label layoutX="33.0" layoutY="103.0" text="Category">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="206.0" layoutY="103.0" text="Movies">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font></Label>
       <Rating layoutX="589.0" layoutY="392.0" rating="0.0" />
-      <ChoiceBox layoutX="383.0" layoutY="111.0" prefHeight="26.0" prefWidth="120.0" />
-      <Label layoutX="338.0" layoutY="115.0" text="Sort by:" />
+      <ChoiceBox layoutX="357.0" layoutY="98.0" prefHeight="26.0" prefWidth="120.0" style="-fx-background-color: #FF000040; -fx-background-radius: 10;" />
+      <Label layoutX="303.0" layoutY="103.0" text="Sort by:">
+         <font>
+            <Font name="Arial Bold" size="14.0" />
+         </font></Label>
+      <Button fx:id="deleteMovieCategory" layoutX="132.0" layoutY="95.0" mnemonicParsing="false" onAction="#deleteMovieCategoryButton" prefHeight="19.0" prefWidth="19.0" style="-fx-background-color: #FF000040;" textFill="#ebe8e8">
+         <graphic>
+            <ImageView fx:id="trash2" fitHeight="18.0" fitWidth="16.0">
+               <image>
+                  <Image url="@icons8-trash-can-layout-for-a-indication-to-throw-trash-24.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="deleteMovie1" layoutX="484.0" layoutY="98.0" mnemonicParsing="false" onAction="#deleteMovieButton" prefHeight="19.0" prefWidth="19.0" style="-fx-background-color: #FF000040;" textFill="#ebe8e8">
+         <graphic>
+            <ImageView fx:id="trash" fitHeight="18.0" fitWidth="16.0">
+               <image>
+                  <Image url="@icons8-trash-can-layout-for-a-indication-to-throw-trash-24.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </AnchorPane>

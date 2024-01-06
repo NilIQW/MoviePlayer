@@ -18,4 +18,10 @@ public class MainController {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+    public void deleteMovieButton(ActionEvent actionEvent) {
+    }
+
+    public void deleteMovieCategoryButton(ActionEvent actionEvent) {
+    }
 }
