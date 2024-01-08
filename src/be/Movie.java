@@ -9,6 +9,13 @@ public class Movie {
     private String path;
     private LocalDate date;
 
+    public Movie(String title, Double rating, String path, LocalDate date){
+        this.title = title;
+        this.rating = rating;
+        this.path = path;
+        this.date = date;
+    }
+
     public Movie(int id, String title, Double rating, String path, LocalDate date){
         this.id = id;
         this.title = title;
