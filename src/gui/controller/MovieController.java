@@ -1,5 +1,6 @@
 package gui.controller;
 
+import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,11 +27,10 @@ import java.io.IOException;
 
 
 public class MovieController implements Initializable {
-
     @FXML
-    public ListView selectedCategories;
+    private ListView selectedCategories;
     @FXML
-    public ChoiceBox categoryChoice;
+    private ChoiceBox categoryChoice;
     ObservableList<String> selectedCategoriesList = FXCollections.observableArrayList();
     @FXML
     private TextField movieTitle;
@@ -38,6 +38,13 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
 
+    private Model model;
+
+    public void setModel(Model model) {
+        this.model = model;
+        categoryChoice.setItems(model.getCategoryList());
+        categoryChoice.setValue(model.getCategoryList().get(0));
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,8 +75,6 @@ public class MovieController implements Initializable {
         }
 
     }
-
-
     public void removeCategoryButton(ActionEvent actionEvent) {
     }
 

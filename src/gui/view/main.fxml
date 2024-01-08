@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane prefHeight="599.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117)); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
+<AnchorPane prefHeight="599.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117)); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
    <children>
       <HBox alignment="CENTER" layoutY="-2.0" prefHeight="54.0" prefWidth="877.0" style="-fx-background-color: #212121;">
          <children>
@@ -32,7 +32,7 @@
             </Text>
          </children>
       </HBox>
-      <ListView fx:id="CategoryListview" layoutX="21.0" layoutY="136.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" />
+      <ListView fx:id="categoryListview" layoutX="21.0" layoutY="136.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" />
       <HBox layoutX="11.0" layoutY="28.0" prefHeight="48.0" prefWidth="17.0">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Library" wrappingWidth="51.17612075805664">

@@ -10,8 +10,15 @@ import java.time.LocalDate;
 public class Model {
     private final static Model instance = new Model();//ensures that by using Singelton all controllers use the same model
     private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
-    private final static ObservableList<Category> categoryList = FXCollections.observableArrayList();
+    private ObservableList<Category> categoryList;
 
+    public Model(){
+        categoryList = Category.defaultCategory();
+    }
+
+    public ObservableList<Category> getCategoryList(){
+        return categoryList;
+    }
 
     public static Model getInstance(){
         return instance;
