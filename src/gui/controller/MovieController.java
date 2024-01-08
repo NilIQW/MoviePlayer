@@ -4,16 +4,26 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+
 import javafx.fxml.Initializable;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import java.io.IOException;
+
 
 public class MovieController implements Initializable {
 
@@ -28,14 +38,26 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
 
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         selectedCategories.setItems(selectedCategoriesList);
 
     }
 
-    public void newCategoryButton(ActionEvent actionEvent) {
+
+    public void newCategoryButton(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
+        Parent root = loader.load();
+        ((NewCategoryController) loader.getController()).setCategories();
+        Stage newCategoryStage = new Stage();
+        newCategoryStage.setTitle("");
+        newCategoryStage.setScene(new Scene(root));
+        newCategoryStage.setResizable(false);
+        newCategoryStage.show();
+
     }
+
 
     public void addCategoryButton(ActionEvent actionEvent) {
 
@@ -46,6 +68,7 @@ public class MovieController implements Initializable {
         }
 
     }
+
 
     public void removeCategoryButton(ActionEvent actionEvent) {
     }
