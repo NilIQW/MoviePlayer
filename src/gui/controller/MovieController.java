@@ -2,11 +2,15 @@ package gui.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class MovieController {
 
@@ -15,8 +19,16 @@ public class MovieController {
     private Stage stage;
     @FXML
     private TextField filePath;
-
-    public void newCategoryButton(ActionEvent actionEvent) {
+    @FXML
+    public void newCategoryButton(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
+        Parent root = loader.load();
+        ((NewCategoryController) loader.getController()).setCategories();
+        Stage newCategoryStage = new Stage();
+        newCategoryStage.setTitle("");
+        newCategoryStage.setScene(new Scene(root));
+        newCategoryStage.setResizable(false);
+        newCategoryStage.show();
     }
 
     public void addCategoryButton(ActionEvent actionEvent) {
