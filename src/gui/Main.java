@@ -16,7 +16,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Model model = new Model();
+        Model model = Model.getInstance();
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("view/main.fxml"));
         Parent root = loader.load();

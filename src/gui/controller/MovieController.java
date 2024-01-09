@@ -57,7 +57,7 @@ public class MovieController implements Initializable {
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-        ((NewCategoryController) loader.getController()).setCategories();
+       // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
@@ -70,13 +70,16 @@ public class MovieController implements Initializable {
     public void addCategoryButton(ActionEvent actionEvent) {
 
         Category selectedCategory = (Category) categoryChoice.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory)) {
+        if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory.getName())) {
             selectedCategoriesList.add(selectedCategory.getName());
 
         }
 
     }
     public void removeCategoryButton(ActionEvent actionEvent) {
+
+
+
     }
 
     public void openFileButton(ActionEvent actionEvent) {
@@ -92,6 +95,7 @@ public class MovieController implements Initializable {
 
     public void saveMovieButton(ActionEvent actionEvent) {
     }
+    
 
 
 }

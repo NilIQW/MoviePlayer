@@ -23,6 +23,10 @@ public class MainController implements Initializable {
         this.model = model;
         categoryListview.setItems(model.getCategoryList());
     }
+    public final void updateModel(){
+        categoryListview.setItems(model.getCategoryList());
+    }
+
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();

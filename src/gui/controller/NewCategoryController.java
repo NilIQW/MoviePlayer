@@ -16,17 +16,15 @@ public class NewCategoryController {
     private Model model;
 
     public void addCat(ActionEvent event) {
-        //SaveCategory( event);
+        SaveCategory( event);
     }
     public void setModel(Model model) {
         this.model = model;
-
     }
     public void SaveCategory(ActionEvent event) {
-        Model model = Model.getInstance();
-       model.createCategory(textField.getText());-
-
-        textField.clear();
+        model = Model.getInstance();
+       model.createCategory(textField.getText());
+       textField.clear();
         closeWindow(event);
     }
 
