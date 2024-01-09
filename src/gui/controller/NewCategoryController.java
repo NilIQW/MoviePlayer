@@ -24,7 +24,7 @@ public class NewCategoryController {
     }
     public void SaveCategory(ActionEvent event) {
         Model model = Model.getInstance();
-       model.createCategory(textField.getText());
+       model.createCategory(textField.getText());-
 
         textField.clear();
         closeWindow(event);
