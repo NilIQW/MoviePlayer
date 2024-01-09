@@ -1,5 +1,6 @@
 package gui.controller;
 
+import be.Category;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -68,9 +69,9 @@ public class MovieController implements Initializable {
 
     public void addCategoryButton(ActionEvent actionEvent) {
 
-        String selectedCategory = (String) categoryChoice.getSelectionModel().getSelectedItem();
+        Category selectedCategory = (Category) categoryChoice.getSelectionModel().getSelectedItem();
         if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory)) {
-            selectedCategoriesList.add(selectedCategory);
+            selectedCategoriesList.add(selectedCategory.getName());
 
         }
 
