@@ -78,8 +78,10 @@ public class MovieController implements Initializable {
     }
     public void removeCategoryButton(ActionEvent actionEvent) {
 
-
-
+        String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
+        if (selectedCategory != null){
+            selectedCategoriesList.remove(selectedCategory);
+        }
     }
 
     public void openFileButton(ActionEvent actionEvent) {
