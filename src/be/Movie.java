@@ -16,14 +16,6 @@ public class Movie {
         this.date = date;
     }
 
-    public Movie(int id, String title, Double rating, String path, LocalDate date){
-        this.id = id;
-        this.title = title;
-        this.rating = rating;
-        this.path = path;
-        this.date = date;
-    }
-
     public int getId() {
         return id;
     }
