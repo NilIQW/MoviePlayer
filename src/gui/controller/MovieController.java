@@ -1,5 +1,6 @@
 package gui.controller;
 
+import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
 import gui.Model;
@@ -66,7 +67,7 @@ public class MovieController implements Initializable {
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-       // ((NewCategoryController) loader.getController()).setCategories();
+        // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
@@ -85,10 +86,11 @@ public class MovieController implements Initializable {
         }
 
     }
+
     public void removeCategoryButton(ActionEvent actionEvent) {
 
         String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null){
+        if (selectedCategory != null) {
             selectedCategoriesList.remove(selectedCategory);
         }
     }
@@ -103,32 +105,16 @@ public class MovieController implements Initializable {
             movieTitle.setText(selectedFile.getName());
         }
     }
+    public void saveMovieButton(ActionEvent actionEvent) throws MovieException {
+        String path = filePath.getText();
+        String title = movieTitle.getText();
+        Double movieRating = rating.getRating();
+        LocalDate lastDate = LocalDate.now();
 
-    public void saveMovieButton(ActionEvent actionEvent) {
-        String movieTitleText = movieTitle.getText();
-        String filePathText = filePath.getText();
-        double ratingValue = rating.getRating();
-        List<String> selectedCategories = new ArrayList<>(selectedCategoriesList);
+        model.createMovie(path, movieRating, title, lastDate);
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
 
-        if (!movieTitleText.isEmpty() && !filePathText.isEmpty() && !selectedCategories.isEmpty()) {
-            // Create a Movie object with the entered information
-            Movie newMovie = new Movie(movieTitleText, ratingValue, filePathText, LocalDate.now());
 
-            // Add the new movie to the model
-            model.addMovie(newMovie);
-
-            // Update the categories in the main controller
-            //((MainController) categoryListview.getScene().getUserData()).updateModel();
-
-            // Close the current stage (movie stage)
-            ((Node) actionEvent.getSource()).getScene().getWindow().hide();
-        } else {
-            // Handle validation or show an error message if required fields are not filled
-            // For example, display an alert or log a message
-        }
     }
-
-
-
-
 }
