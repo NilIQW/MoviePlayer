@@ -14,7 +14,7 @@ public class ConnectionManager {
         ds = new SQLServerDataSource();
         ds.setDatabaseName("MoviePlayer24");
         ds.setUser("CSe2023b_e_5");
-        ds.setPassword("CSe2023bE5#23 ");
+        ds.setPassword("CSe2023bE5#23");
         ds.setServerName("EASV-DB4");
         ds.setTrustServerCertificate(true);
     }

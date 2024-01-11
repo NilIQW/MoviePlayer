@@ -102,6 +102,7 @@ public class MovieController implements Initializable {
         }
     }
 
+<<<<<<< HEAD
     public void saveMovieButton(ActionEvent actionEvent) throws MovieException {
         String path = filePath.getText();
         String title = movieTitle.getText();
@@ -111,6 +112,9 @@ public class MovieController implements Initializable {
         model.createMovie(path, movieRating, title, lastDate );
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
+=======
+    public void saveMovieButton(ActionEvent actionEvent) {
+>>>>>>> e8d5a7369762680d1756f875be2afc580b182581
     }
 
 
