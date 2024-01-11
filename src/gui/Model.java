@@ -40,6 +40,9 @@ public class Model {
         Category newCategory = new Category(name);
         categoryList.add(newCategory);
     }
+    public void addMovie(Movie movie){
+        movieList.add(movie);
+    }
 }
 
 

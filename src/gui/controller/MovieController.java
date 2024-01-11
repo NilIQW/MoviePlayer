@@ -1,6 +1,7 @@
 package gui.controller;
 
 import be.Category;
+import be.Movie;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,8 @@ import java.io.File;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -102,7 +105,29 @@ public class MovieController implements Initializable {
     }
 
     public void saveMovieButton(ActionEvent actionEvent) {
+        String movieTitleText = movieTitle.getText();
+        String filePathText = filePath.getText();
+        double ratingValue = rating.getRating();
+        List<String> selectedCategories = new ArrayList<>(selectedCategoriesList);
+
+        if (!movieTitleText.isEmpty() && !filePathText.isEmpty() && !selectedCategories.isEmpty()) {
+            // Create a Movie object with the entered information
+            Movie newMovie = new Movie(movieTitleText, ratingValue, filePathText, LocalDate.now());
+
+            // Add the new movie to the model
+            model.addMovie(newMovie);
+
+            // Update the categories in the main controller
+            //((MainController) categoryListview.getScene().getUserData()).updateModel();
+
+            // Close the current stage (movie stage)
+            ((Node) actionEvent.getSource()).getScene().getWindow().hide();
+        } else {
+            // Handle validation or show an error message if required fields are not filled
+            // For example, display an alert or log a message
+        }
     }
+
 
 
 
