@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 
@@ -18,16 +19,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.controlsfx.control.Rating;
 
 import java.io.File;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import java.io.IOException;
 
 
 public class MovieController implements Initializable {
+    @FXML
+    public Rating rating;
     @FXML
     private ListView selectedCategories;
     @FXML
@@ -96,8 +102,16 @@ public class MovieController implements Initializable {
     }
 
     public void saveMovieButton(ActionEvent actionEvent) {
+        String path = filePath.getText();
+        String title = movieTitle.getText();
+        Double movieRating = rating.getRating();
+        LocalDate lastDate = LocalDate.now();
+
+        model.createMovie(path, movieRating, title, lastDate );
+        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+        stage.close();
     }
-    
+
 
 
 }

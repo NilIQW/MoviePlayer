@@ -1,13 +1,18 @@
 package gui;
 
+import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
+import bll.MovieManager;
+import dal.DAOMovie;
+import dal.IMovieDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 
 public class Model {
+    MovieManager movieManager;
     private final static Model instance = new Model();//ensures that by using Singelton all controllers use the same model
     private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private ObservableList<Category> categoryList;
@@ -24,9 +29,11 @@ public class Model {
         return instance;
     }
 
-    public void createMovie(String title, Double rating, String path, LocalDate date){
+    public void createMovie(String title, Double rating, String path, LocalDate date) {
         Movie newMovie = new Movie(title, rating, path, date); //creating movie object
         movieList.add(newMovie);
+        //movieManager.createMovie(newMovie);
+
     }
 
     public void createCategory(String name){
