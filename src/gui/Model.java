@@ -4,8 +4,6 @@ import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
 import bll.MovieManager;
-import dal.DAOMovie;
-import dal.IMovieDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

@@ -3,6 +3,9 @@ package gui.controller;
 import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
+import bll.CategoryManager;
+import dal.CategoryDAO;
+import dal.ICategoryDAO;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +53,14 @@ public class MovieController implements Initializable {
     private TextField filePath;
 
     private Model model;
+    private CategoryManager myCategoryManager;
+
+    public MovieController(ICategoryDAO categoryDAO) {
+        this.myCategoryManager = new CategoryManager(categoryDAO);
+    }
+    public MovieController(){
+
+    }
 
     public void setModel(Model model) {
         this.model = model;

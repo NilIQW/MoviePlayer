@@ -5,11 +5,11 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
 
-public class DAOMovie implements IMovieDAO{
+public class MovieDAO implements IMovieDAO{
     private final ConnectionManager connectionManager;
 
-    public DAOMovie(ConnectionManager connectionManager){
-        this.connectionManager=connectionManager;
+    public MovieDAO(){
+        this.connectionManager=new ConnectionManager();
     }
 
     @Override

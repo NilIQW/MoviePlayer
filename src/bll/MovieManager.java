@@ -2,14 +2,13 @@ package bll;
 
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import dal.ConnectionManager;
-import dal.DAOMovie;
+import dal.MovieDAO;
 import dal.IMovieDAO;
 import Exceptions.MovieException;
 
 
 public class MovieManager {
-    IMovieDAO movieDao = new DAOMovie(new ConnectionManager());
+    IMovieDAO movieDao = new MovieDAO();
 
     public void createMovie (Movie movie) throws MovieException {
         if (!isMovieValid(movie))

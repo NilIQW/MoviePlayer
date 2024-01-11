@@ -18,7 +18,6 @@ public class MainController implements Initializable {
     @FXML
     private ListView categoryListview;
     private Model model;
-
     public void setModel(Model model) {
         this.model = model;
         categoryListview.setItems(model.getCategoryList());
