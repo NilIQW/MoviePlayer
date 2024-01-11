@@ -102,14 +102,6 @@ public class MovieController implements Initializable {
     }
 
     public void saveMovieButton(ActionEvent actionEvent) {
-        String path = filePath.getText();
-        String title = movieTitle.getText();
-        Double movieRating = rating.getRating();
-        LocalDate lastDate = LocalDate.now();
-
-        model.createMovie(path, movieRating, title, lastDate );
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
     }
 
 

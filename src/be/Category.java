@@ -41,7 +41,7 @@ public class Category {
         this.name = name;
     }
 
-    public static final ObservableList<Category> defaultCategory(){
+    public static ObservableList<Category> defaultCategory(){
         ObservableList<Category> categories = FXCollections.observableArrayList();
         categories.add(new Category("Action"));
         categories.add(new Category("Adventure"));
