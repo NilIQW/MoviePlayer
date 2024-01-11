@@ -10,11 +10,11 @@ import Exceptions.MovieException;
 public class MovieManager {
     IMovieDAO movieDao = new DAOMovie();
 
-    public void createMovie (Movie m) throws MovieException {
-        if (!isMovieValid(m))
+    public void createMovie (Movie movie) throws MovieException {
+        if (!isMovieValid(movie))
             throw new MovieException("Movie is incomplete");
         try {
-            movieDao.createMovie(m);
+            movieDao.createMovie(movie);
         } catch (SQLServerException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 package gui.controller;
 
+import Exceptions.MovieException;
 import be.Category;
 import gui.Model;
 import javafx.collections.FXCollections;
@@ -101,7 +102,7 @@ public class MovieController implements Initializable {
         }
     }
 
-    public void saveMovieButton(ActionEvent actionEvent) {
+    public void saveMovieButton(ActionEvent actionEvent) throws MovieException {
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();

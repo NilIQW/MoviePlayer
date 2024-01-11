@@ -19,20 +19,22 @@ public class Model {
 
     public Model(){
         categoryList = Category.defaultCategory();
+        movieManager = new MovieManager();
     }
 
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
 
+
     public static Model getInstance(){
         return instance;
     }
 
-    public void createMovie(String title, Double rating, String path, LocalDate date) {
+    public void createMovie(String title, Double rating, String path, LocalDate date) throws MovieException {
         Movie newMovie = new Movie(title, rating, path, date); //creating movie object
         movieList.add(newMovie);
-        //movieManager.createMovie(newMovie);
+        movieManager.createMovie(newMovie);
 
     }
 
