@@ -3,14 +3,12 @@ package gui;
 import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
-import bll.CategoryManager;
 import bll.MovieManager;
-import dal.CategoryDAO;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public class Model {
     MovieManager movieManager;
@@ -21,8 +19,6 @@ public class Model {
     public Model(){
         categoryList = Category.defaultCategory();
         movieManager = new MovieManager();
-        initializeCategories();
-        //getAllCategories();
     }
 
     public ObservableList<Category> getCategoryList(){
@@ -45,28 +41,9 @@ public class Model {
         Category newCategory = new Category(name);
         categoryList.add(newCategory);
     }
-
-    public void addMovie(Movie movie){
-        movieList.add(movie);
+    public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
+        movieManager.addMovieToCategory(category, movie);
     }
-
-    private void initializeCategories() {
-        CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
-        ObservableList<Category> defaultCategories = Category.defaultCategory();
-
-        for (Category defaultCategory : defaultCategories) {
-            if (!categoryManager.categoryExists(defaultCategory)) {
-                categoryManager.addCategory(defaultCategory);
-            }
-        }
-    }
-
-
-    public List<Category> getAllCategories() {
-        CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
-        return categoryManager.getAllCategories();
-    }
-
 }
 
 

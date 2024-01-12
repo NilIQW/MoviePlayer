@@ -1,5 +1,6 @@
 package bll;
 
+import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.MovieDAO;
@@ -20,11 +21,12 @@ public class MovieManager {
         }
 
     }
-
-
     private boolean isMovieValid (Movie movie){
         return movie != null && !movie.getTitle().isEmpty() && movie.getRating() >= 0 && !movie.getPath().isEmpty();
 
+    }
+    public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
+        movieDao.addMovieToCategory(category, movie);
     }
 
 }

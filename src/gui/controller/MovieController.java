@@ -111,6 +111,7 @@ public class MovieController implements Initializable {
 
 
     public void saveMovieButton(ActionEvent actionEvent) {
+
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();

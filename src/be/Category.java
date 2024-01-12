@@ -24,6 +24,9 @@ public class Category {
     public List<Movie> getAllMovies(){
         return allMovies;
     }
+    public void addMovie (Movie movie){
+        allMovies.add(movie);
+    }
 
 
     public int getId() {
