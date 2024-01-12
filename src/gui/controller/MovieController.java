@@ -51,13 +51,7 @@ public class MovieController implements Initializable {
     private Stage stage;
     @FXML
     private TextField filePath;
-
     private Model model;
-    private CategoryManager myCategoryManager;
-
-    public MovieController(ICategoryDAO categoryDAO) {
-        this.myCategoryManager = new CategoryManager(categoryDAO);
-    }
     public MovieController(){
 
     }
@@ -125,7 +119,6 @@ public class MovieController implements Initializable {
         model.createMovie(path, movieRating, title, lastDate);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
-
 
     }
 }

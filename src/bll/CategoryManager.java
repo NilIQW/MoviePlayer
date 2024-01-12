@@ -20,4 +20,14 @@ public class CategoryManager {
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
+    public boolean categoryExists(Category category) {
+        List<Category> existingCategories = categoryDAO.getAllCategories();
+
+        for (Category existingCategory : existingCategories) {
+            if (existingCategory.getName().equals(category.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

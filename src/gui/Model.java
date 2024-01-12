@@ -3,11 +3,14 @@ package gui;
 import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
+import bll.CategoryManager;
 import bll.MovieManager;
+import dal.CategoryDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Model {
     MovieManager movieManager;
@@ -18,6 +21,8 @@ public class Model {
     public Model(){
         categoryList = Category.defaultCategory();
         movieManager = new MovieManager();
+        initializeCategories();
+        //getAllCategories();
     }
 
     public ObservableList<Category> getCategoryList(){
@@ -42,6 +47,23 @@ public class Model {
     }
     public void addMovie(Movie movie){
         movieList.add(movie);
+    }
+
+    private void initializeCategories() {
+        CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
+        ObservableList<Category> defaultCategories = Category.defaultCategory();
+
+        for (Category defaultCategory : defaultCategories) {
+            if (!categoryManager.categoryExists(defaultCategory)) {
+                categoryManager.addCategory(defaultCategory);
+            }
+        }
+    }
+
+
+    public List<Category> getAllCategories() {
+        CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
+        return categoryManager.getAllCategories();
     }
 }
 
