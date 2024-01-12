@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 
@@ -80,6 +81,10 @@ public class MovieController implements Initializable {
         if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory.getName())) {
             selectedCategoriesList.add(selectedCategory.getName());
 
+        }else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "This category already exists in the selected categories");
+            alert.showAndWait();
+
         }
 
     }
@@ -102,19 +107,22 @@ public class MovieController implements Initializable {
         }
     }
 
-<<<<<<< HEAD
-    public void saveMovieButton(ActionEvent actionEvent) throws MovieException {
+
+    public void saveMovieButton(ActionEvent actionEvent) {
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();
         LocalDate lastDate = LocalDate.now();
-
-        model.createMovie(path, movieRating, title, lastDate );
+        try{
+        model.createMovie(path, movieRating, title, lastDate);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
-=======
-    public void saveMovieButton(ActionEvent actionEvent) {
->>>>>>> e8d5a7369762680d1756f875be2afc580b182581
+        } catch (MovieException e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            e.printStackTrace();
+            a.show();
+        }
+
     }
 
 
