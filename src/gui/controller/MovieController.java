@@ -2,10 +2,6 @@ package gui.controller;
 
 import Exceptions.MovieException;
 import be.Category;
-import be.Movie;
-import bll.CategoryManager;
-import dal.CategoryDAO;
-import dal.ICategoryDAO;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +10,7 @@ import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 
@@ -30,8 +27,6 @@ import java.io.File;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -72,7 +67,7 @@ public class MovieController implements Initializable {
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-        // ((NewCategoryController) loader.getController()).setCategories();
+       // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
@@ -88,14 +83,17 @@ public class MovieController implements Initializable {
         if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory.getName())) {
             selectedCategoriesList.add(selectedCategory.getName());
 
+        }else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "This category already exists in the selected categories");
+            alert.showAndWait();
+
         }
 
     }
-
     public void removeCategoryButton(ActionEvent actionEvent) {
 
         String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null) {
+        if (selectedCategory != null){
             selectedCategoriesList.remove(selectedCategory);
         }
     }
@@ -110,15 +108,26 @@ public class MovieController implements Initializable {
             movieTitle.setText(selectedFile.getName());
         }
     }
-    public void saveMovieButton(ActionEvent actionEvent) throws MovieException {
+
+
+    public void saveMovieButton(ActionEvent actionEvent) {
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();
         LocalDate lastDate = LocalDate.now();
-
+        try{
         model.createMovie(path, movieRating, title, lastDate);
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
+        } catch (MovieException e) {
+            Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            e.printStackTrace();
+            a.show();
+        }
+
     }
+
+
+
 }
