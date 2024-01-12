@@ -5,12 +5,16 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
 
-public class DAOMovie implements IMovieDAO{
-    private final ConnectionManager dbConnector = new ConnectionManager();
+public class MovieDAO implements IMovieDAO{
+    private final ConnectionManager connectionManager;
+
+    public MovieDAO(){
+        this.connectionManager=new ConnectionManager();
+    }
 
     @Override
     public void createMovie(Movie m) throws SQLServerException {
-        try (Connection con = dbConnector.getConnection()) {
+        try (Connection con = connectionManager.getConnection()) {
             String sql = "INSERT INTO Movie (name, rating, filelink, lastview)" + "VALUES (?,?,?,?)";
             PreparedStatement pt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pt.setString(1, m.getTitle());

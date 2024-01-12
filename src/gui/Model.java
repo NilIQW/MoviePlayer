@@ -42,10 +42,6 @@ public class Model {
         Category newCategory = new Category(name);
         categoryList.add(newCategory);
     }
-
-    public void addMovieToCategory(Category category, Movie movie){
-
-    }
 }
 
 

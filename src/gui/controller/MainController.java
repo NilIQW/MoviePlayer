@@ -7,6 +7,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
@@ -18,7 +21,6 @@ public class MainController implements Initializable {
     @FXML
     private ListView categoryListview;
     private Model model;
-
     public void setModel(Model model) {
         this.model = model;
         categoryListview.setItems(model.getCategoryList());
@@ -44,4 +46,6 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
     }
+
+
 }
