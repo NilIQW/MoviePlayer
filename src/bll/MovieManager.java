@@ -7,6 +7,9 @@ import dal.MovieDAO;
 import dal.IMovieDAO;
 import Exceptions.MovieException;
 
+import java.sql.SQLException;
+import java.util.List;
+
 
 public class MovieManager {
     IMovieDAO movieDao = new MovieDAO();
@@ -27,6 +30,14 @@ public class MovieManager {
     }
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieDao.addMovieToCategory(category, movie);
+    }
+
+    public List<Movie> getAllMovies() throws SQLException {
+        return movieDao.getAllMovies();
+    }
+
+    public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
+        return movieDao.getAllMoviesInCategory(category);
     }
 
 }

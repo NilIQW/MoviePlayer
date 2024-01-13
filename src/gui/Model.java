@@ -9,7 +9,10 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Model {
     MovieManager movieManager;
@@ -30,6 +33,10 @@ public class Model {
 
     public ObservableList<Category> getCategoryList(){
         return categoryList;
+    }
+    public ObservableList<Movie> returnMovieList() throws SQLException {
+        loadMovies();
+        return movieList;
     }
 
 
@@ -63,24 +70,30 @@ public class Model {
     }
 
 
-
-
-
-
     private static void initializeCategories() {
         ObservableList<Category> defaultCategories = DefaultCategories.defaultCategory();
         categoryList = FXCollections.observableArrayList(defaultCategories);
     }
 
-    public void loadCategories(){
+    public void loadCategories() throws SQLServerException {
         categoryList.clear();
         categoryList.addAll(categoryManager.getAllCategories());
+        for (Category category : categoryList) {
+            List<Movie> moviesInCategory = movieManager.getAllMoviesInCategory(category);
+            category.setAllMovies(moviesInCategory);
+        }
     }
 
     public void getAllCategories() {
         CategoryManager categoryManager = new CategoryManager();
         categoryManager.getAllCategories();
     }
+    public void loadMovies() throws SQLException {
+        movieList.clear();
+        movieList.addAll(movieManager.getAllMovies());
+    }
+
+
 
 }
 

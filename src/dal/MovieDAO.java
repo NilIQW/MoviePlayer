@@ -5,6 +5,9 @@ import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MovieDAO implements IMovieDAO{
     private final ConnectionManager connectionManager;
@@ -48,5 +51,70 @@ public class MovieDAO implements IMovieDAO{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public List<Movie> getAllMovies() throws SQLException {
+        List <Movie> movies = new ArrayList<>();
+        try(Connection con = connectionManager.getConnection()){
+            String sql = "SELECT * FROM Movie";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+
+                String title = rs.getString("name");
+                Double rating = rs.getDouble("rating");
+                String path = rs.getString("filelink");
+                // Retrieve the Date from the ResultSet
+                Date sqlDate = rs.getDate("lastview");
+
+                // Convert java.sql.Date to java.time.LocalDate
+                LocalDate lastView = sqlDate.toLocalDate();
+
+
+                Movie m = new Movie(title,rating,path, lastView);
+                movies.add(m);
+
+            }
+            return movies;
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    @Override
+    public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
+        ArrayList<Movie> MoviesInCategory = new ArrayList<>();
+        try (Connection con = connectionManager.getConnection()) {
+            // SQL query to join Songs and PlaylistsSongs tables and retrieve songs for the current playlist
+            String sql = "SELECT * FROM Movie " +
+                    "JOIN MovieCategory ON Movie.ID = MovieCategory.MovieId " +
+                    "WHERE MovieCategory.CategoryId = ?";
+            try (PreparedStatement pt = con.prepareStatement(sql)) {
+                // Set the MovieID parameter in the SQL query to the ID of the current playlist
+                pt.setInt(1, category.getId());
+
+                try (ResultSet rs = pt.executeQuery()) {
+                    while (rs.next()) {
+                        String title = rs.getString("name");
+                        Double rating = rs.getDouble("rating");
+                        String path = rs.getString("filelink");
+                        // Retrieve the Date from the ResultSet
+                        Date sqlDate = rs.getDate("lastview");
+
+                        // Convert java.sql.Date to java.time.LocalDate
+                        LocalDate lastView = sqlDate.toLocalDate();
+
+
+                        Movie m = new Movie(title,rating,path, lastView);
+                        MoviesInCategory.add(m);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return MoviesInCategory;
     }
 }

@@ -1,6 +1,7 @@
 package gui.controller;
 
 import be.Category;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +31,11 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         categoryListview.setItems(model.getCategoryList());
-        model.loadCategories();
+        try {
+            model.loadCategories();
+        } catch (SQLServerException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
