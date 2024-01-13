@@ -5,6 +5,7 @@ import be.Category;
 import be.Movie;
 import bll.CategoryManager;
 import bll.MovieManager;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.CategoryDAO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,16 +19,15 @@ public class Model {
     private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private static ObservableList<Category> categoryList;
 
-
     static {
         initializeCategories();
     }
-    private Model(){
+    private Model() {
         categoryList = DefaultCategories.defaultCategory();
         movieManager = new MovieManager();
 
-        //getAllCategories();
-    }
+    }   //getAllCategories();
+
 
     public ObservableList<Category> getCategoryList(){
         return categoryList;
@@ -49,10 +49,10 @@ public class Model {
         Category newCategory = new Category(name);
         categoryList.add(newCategory);
     }
-
-    public void addMovie(Movie movie){
-        movieList.add(movie);
+    public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
+        movieManager.addMovieToCategory(category, movie);
     }
+
 
     private static void initializeCategories() {
         ObservableList<Category> defaultCategories = DefaultCategories.defaultCategory();
@@ -65,7 +65,6 @@ public class Model {
         CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
         return categoryManager.getAllCategories();
     }
-
 }
 
 

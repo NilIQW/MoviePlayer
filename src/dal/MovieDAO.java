@@ -1,5 +1,6 @@
 package dal;
 
+import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
@@ -28,6 +29,20 @@ public class MovieDAO implements IMovieDAO{
                     long generatedKey = keys.getLong(1);
 
                 }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
+        try(Connection con = connectionManager.getConnection()){
+            String sql = "INSERT INTO CatMovie (CategoryId, MovieId) VALUES (?,?)";
+            try(PreparedStatement pt = con.prepareStatement(sql)){
+                pt.setInt(1, category.getId());
+                pt.setInt(2, movie.getId());
+                pt.execute();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
