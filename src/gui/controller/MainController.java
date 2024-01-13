@@ -30,13 +30,13 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         categoryListview.setItems(model.getCategoryList());
+        model.loadCategories();
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
         MovieController movieController = loader.getController();
-        //movieController.setModel(model);
         Stage stage = new Stage();
         stage.setTitle("Media Player");
         stage.setScene(new Scene(root));

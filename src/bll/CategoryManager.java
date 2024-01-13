@@ -7,11 +7,7 @@ import dal.ICategoryDAO;
 import java.util.List;
 
 public class CategoryManager {
-    private ICategoryDAO categoryDAO;
-
-    public CategoryManager(ICategoryDAO categoryDAO) {
-        this.categoryDAO = categoryDAO;
-    }
+    ICategoryDAO categoryDAO = new CategoryDAO();
 
     public void addCategory(Category category) {
         categoryDAO.saveCategory(category);
