@@ -16,12 +16,16 @@ public class Model {
     MovieManager movieManager;
     private final static Model instance = new Model();//ensures that by using Singelton all controllers use the same model
     private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
-    private ObservableList<Category> categoryList;
+    private static ObservableList<Category> categoryList;
 
-    public Model(){
-        categoryList = Category.defaultCategory();
-        movieManager = new MovieManager();
+
+    static {
         initializeCategories();
+    }
+    private Model(){
+        categoryList = DefaultCategories.defaultCategory();
+        movieManager = new MovieManager();
+
         //getAllCategories();
     }
 
@@ -30,7 +34,7 @@ public class Model {
     }
 
 
-    public static Model getInstance(){
+    public static Model getInstance() {
         return instance;
     }
 
@@ -50,16 +54,11 @@ public class Model {
         movieList.add(movie);
     }
 
-    private void initializeCategories() {
-        CategoryManager categoryManager = new CategoryManager(new CategoryDAO());
-        ObservableList<Category> defaultCategories = Category.defaultCategory();
-
-        for (Category defaultCategory : defaultCategories) {
-            if (!categoryManager.categoryExists(defaultCategory)) {
-                categoryManager.addCategory(defaultCategory);
-            }
-        }
+    private static void initializeCategories() {
+        ObservableList<Category> defaultCategories = DefaultCategories.defaultCategory();
+        categoryList = FXCollections.observableArrayList(defaultCategories);
     }
+
 
 
     public List<Category> getAllCategories() {

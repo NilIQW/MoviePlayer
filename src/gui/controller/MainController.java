@@ -1,5 +1,6 @@
 package gui.controller;
 
+import be.Category;
 import gui.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,13 +20,15 @@ import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
     @FXML
-    private ListView categoryListview;
+    private ListView<Category> categoryListview;
     private Model model;
-    public void setModel(Model model) {
-        this.model = model;
+
+    public final void updateModel(){
         categoryListview.setItems(model.getCategoryList());
     }
-    public final void updateModel(){
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        model = Model.getInstance();
         categoryListview.setItems(model.getCategoryList());
     }
 
@@ -33,7 +36,7 @@ public class MainController implements Initializable {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
         MovieController movieController = loader.getController();
-        movieController.setModel(model);
+        //movieController.setModel(model);
         Stage stage = new Stage();
         stage.setTitle("Media Player");
         stage.setScene(new Scene(root));
@@ -43,9 +46,7 @@ public class MainController implements Initializable {
     }
     public void deleteMovieCategoryButton(ActionEvent actionEvent) {
     }
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-    }
+
     public void showAlert(){
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
         alert.setTitle("Attention");
