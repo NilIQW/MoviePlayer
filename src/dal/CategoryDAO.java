@@ -25,10 +25,12 @@ public class CategoryDAO implements ICategoryDAO {
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    int id = generatedKeys.getInt(1);
+                    int id = generatedKeys.getInt(1);  // Extract the generated ID from the result set
                     category.setId(id);
                 }
             }
+
+
 
         } catch (SQLException e) {
             e.printStackTrace(); // Handle the exception appropriately

@@ -27,6 +27,7 @@ public class MovieDAO implements IMovieDAO{
             try (ResultSet keys = pt.getGeneratedKeys()) {
                 if (keys.next()) {
                     long generatedKey = keys.getLong(1);
+                    m.setId((int)generatedKey);
 
                 }
             }
@@ -38,10 +39,10 @@ public class MovieDAO implements IMovieDAO{
     @Override
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         try(Connection con = connectionManager.getConnection()){
-            String sql = "INSERT INTO CatMovie (CategoryId, MovieId) VALUES (?,?)";
+            String sql = "INSERT INTO MovieCategory ( MovieId, CategoryId) VALUES (?,?)";
             try(PreparedStatement pt = con.prepareStatement(sql)){
-                pt.setInt(1, category.getId());
-                pt.setInt(2, movie.getId());
+                pt.setInt(1, movie.getId());
+                pt.setInt(2, category.getId());
                 pt.execute();
             }
         } catch (SQLException e) {

@@ -30,8 +30,8 @@ public class Model {
         return instance;
     }
 
-    public void createMovie(String title, Double rating, String path, LocalDate date) throws MovieException {
-        Movie newMovie = new Movie(title, rating, path, date); //creating movie object
+    public void createMovie(Movie newMovie) throws MovieException {
+        //Movie newMovie = new Movie(title, rating, path, date); //creating movie object
         movieList.add(newMovie);
         movieManager.createMovie(newMovie);
 
@@ -44,6 +44,17 @@ public class Model {
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieManager.addMovieToCategory(category, movie);
     }
+    public Category getCategoryByName(String categoryName) throws SQLServerException {
+        for (Category category : categoryList) {
+            if (category.getName().equals(categoryName)) {
+                return category;
+            }
+        }
+        return null;
+    }
+
+
+
 }
 
 

@@ -2,6 +2,8 @@ package gui.controller;
 
 import Exceptions.MovieException;
 import be.Category;
+import be.Movie;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -116,8 +118,18 @@ public class MovieController implements Initializable {
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();
         LocalDate lastDate = LocalDate.now();
+
         try{
-        model.createMovie(path, movieRating, title, lastDate);
+            Movie myObject = new Movie(title, movieRating, path, lastDate);
+            model.createMovie(myObject);
+            for (String categoryName : selectedCategoriesList) {
+                Category category = model.getCategoryByName(categoryName);
+                if (category != null) {
+
+
+                    model.addMovieToCategory(category, myObject);
+                }
+            }
         Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
         stage.close();
 
@@ -125,6 +137,8 @@ public class MovieController implements Initializable {
             Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
             e.printStackTrace();
             a.show();
+        } catch (SQLServerException e) {
+            throw new RuntimeException(e);
         }
 
     }
