@@ -3,11 +3,15 @@ import be.Category;
 import gui.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class NewCategoryController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class NewCategoryController implements Initializable {
     @FXML
     private Button closeButton;
     @FXML
@@ -18,14 +22,11 @@ public class NewCategoryController {
     public void addCat(ActionEvent event) {
         SaveCategory( event);
     }
-    public void setModel(Model model) {
-        this.model = model;
-    }
     public void SaveCategory(ActionEvent event) {
-        model = Model.getInstance();
        model.createCategory(textField.getText());
+
        textField.clear();
-        closeWindow(event);
+       closeWindow(event);
     }
 
     public void closeWindow(ActionEvent event) {
@@ -33,8 +34,8 @@ public class NewCategoryController {
         stage.close();
     }
 
-
-   public void setCategories() {this.model = model;
-
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        model = Model.getInstance();
     }
 }
