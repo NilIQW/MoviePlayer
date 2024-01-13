@@ -2,6 +2,7 @@ package gui.controller;
 
 import Exceptions.MovieException;
 import be.Category;
+import gui.DefaultCategories;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,13 +48,13 @@ public class MovieController implements Initializable {
 
     public void setModel(Model model) {
         this.model = model;
-        categoryChoice.setItems(model.getCategoryList());
-        categoryChoice.setValue(model.getCategoryList().get(0));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         selectedCategories.setItems(selectedCategoriesList);
+        categoryChoice.setItems(DefaultCategories.defaultCategory());
+        categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
 
     }
 
