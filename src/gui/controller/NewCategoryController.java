@@ -25,7 +25,6 @@ public class NewCategoryController implements Initializable {
     }
     public void SaveCategory(ActionEvent event) {
        model.createCategory(textField.getText());
-
        textField.clear();
        closeWindow(event);
 

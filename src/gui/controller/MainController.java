@@ -2,10 +2,8 @@ package gui.controller;
 
 import be.Category;
 import be.Movie;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,27 +38,21 @@ public class MainController implements Initializable {
 
     private static Model model;
 
-    public final void updateModel(){
-        categoryListview.setItems(model.getCategoryList());
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         ObservableList <Movie> data;
 
         categoryListview.setItems(model.getCategoryList());
+
         try {
 
             model.loadCategories();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                updateTable(Category)newSelection);
-            }
 
-    });
+
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
@@ -111,6 +103,6 @@ public class MainController implements Initializable {
 
     private void updateMoviesInMovieTable(Movie newSelection) {
     }
-   }
+
 
 }

@@ -50,7 +50,7 @@ public class MovieController implements Initializable {
     private Model model;
 
 
-    public MovieController(){
+    public MovieController() {
 
     }
 
@@ -60,14 +60,14 @@ public class MovieController implements Initializable {
         selectedCategories.setItems(selectedCategoriesList);
         categoryChoice.setItems(DefaultCategories.defaultCategory());
         categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
-         MainController controller = new MainController();
+        MainController controller = new MainController();
     }
 
 
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-       // ((NewCategoryController) loader.getController()).setCategories();
+        // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
@@ -83,17 +83,18 @@ public class MovieController implements Initializable {
         if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory.getName())) {
             selectedCategoriesList.add(selectedCategory.getName());
 
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "This category already exists in the selected categories");
             alert.showAndWait();
 
         }
 
     }
+
     public void removeCategoryButton(ActionEvent actionEvent) {
 
         String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null){
+        if (selectedCategory != null) {
             selectedCategoriesList.remove(selectedCategory);
         }
     }
@@ -110,38 +111,41 @@ public class MovieController implements Initializable {
     }
 
 
-    public void saveMovieButton(ActionEvent actionEvent) throws SQLException {
 
-        String path = filePath.getText();
-        String title = movieTitle.getText();
-        Double movieRating = rating.getRating();
-        LocalDate lastDate = LocalDate.now();
+        public void saveMovieButton(ActionEvent actionEvent){
+            // Retrieve input values
 
-        try{
-            Movie myObject = new Movie(title, movieRating, path, lastDate);
-            model.createMovie(myObject);
-            for (String categoryName : selectedCategoriesList) {
-                Category category = model.getCategoryByName(categoryName);
-                if (category != null) {
+            String path = filePath.getText();
+            String title = movieTitle.getText();
+            Double movieRating = rating.getRating();
+            LocalDate lastDate = LocalDate.now();
 
-
-                    model.addMovieToCategory(category, myObject);
+            try {
+                // Create a Movie object with the provided details
+                Movie myObject = new Movie(title, movieRating, path, lastDate);
+                model.createMovie(myObject);
+                // Associate the movie with selected categories
+                for (String categoryName : selectedCategoriesList) {
+                    // Retrieve the Category object based on the category name
+                    Category category = model.getCategoryByName(categoryName);
+                    if (category != null) {
+                        // Add the created movie to the retrieved category
+                        model.addMovieToCategory(category, myObject);
+                    }
                 }
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
+
+            } catch (MovieException e) {
+                Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                e.printStackTrace();
+                a.show();
+            } catch (SQLServerException e) {
+                throw new RuntimeException(e);
+
             }
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
-
-        } catch (MovieException e) {
-            Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            e.printStackTrace();
-            a.show();
-        } catch (SQLServerException e) {
-            throw new RuntimeException(e);
-
+            //MainController.updateTable();
         }
-        //MainController.updateTable();
+
+
     }
-
-
-
-}

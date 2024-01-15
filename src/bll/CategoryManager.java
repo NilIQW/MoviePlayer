@@ -10,7 +10,11 @@ public class CategoryManager {
     ICategoryDAO categoryDAO = new CategoryDAO();
 
     public void addCategory(Category category) {
-        categoryDAO.saveCategory(category);
+        if(!categoryExists(category)) {
+            categoryDAO.saveCategory(category);
+        }else{
+            System.out.println("Category already exists" + category.getName());
+    }
     }
 
     public List<Category> getAllCategories() {
