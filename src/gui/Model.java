@@ -13,26 +13,38 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class Model {
-    MovieManager movieManager;
+    static MovieManager movieManager;
     CategoryManager categoryManager;
-    private final static Model instance = new Model();//ensures that by using Singelton all controllers use the same model
+    private final static Model instance;//ensures that by using Singelton all controllers use the same model
+
+    static {
+        try {
+            instance = new Model();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private static ObservableList<Category> categoryList;
 
     static {
         initializeCategories();
     }
-    private Model() {
+    private Model() throws SQLException {
         categoryList = DefaultCategories.defaultCategory();
         movieManager = new MovieManager();
         categoryManager = new CategoryManager();
+
     }   //getAllCategories();
+
+
 
 
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
-    public ObservableList<Movie> returnMovieList() throws SQLException {
+    public static ObservableList<Movie> returnMovieList() throws SQLException {
         loadMovies();
         return movieList;
     }
@@ -90,7 +102,7 @@ public class Model {
         CategoryManager categoryManager = new CategoryManager();
         categoryManager.getAllCategories();
     }
-    public void loadMovies() throws SQLException {
+    public static void loadMovies() throws SQLException {
         movieList.clear();
         movieList.addAll(movieManager.getAllMovies());
     }

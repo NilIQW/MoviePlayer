@@ -7,7 +7,7 @@ import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import gui.DefaultCategories;
-
+import gui.controller.MainController;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +29,7 @@ import org.controlsfx.control.Rating;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -47,7 +48,9 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
     private Model model;
-    public MovieController(){
+
+
+    public MovieController() {
 
     }
 
@@ -57,14 +60,14 @@ public class MovieController implements Initializable {
         selectedCategories.setItems(selectedCategoriesList);
         categoryChoice.setItems(DefaultCategories.defaultCategory());
         categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
-
+        MainController controller = new MainController();
     }
 
 
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-       // ((NewCategoryController) loader.getController()).setCategories();
+        // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
@@ -80,17 +83,18 @@ public class MovieController implements Initializable {
         if (selectedCategory != null && !selectedCategoriesList.contains(selectedCategory.getName())) {
             selectedCategoriesList.add(selectedCategory.getName());
 
-        }else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "This category already exists in the selected categories");
             alert.showAndWait();
 
         }
 
     }
+
     public void removeCategoryButton(ActionEvent actionEvent) {
 
         String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
-        if (selectedCategory != null){
+        if (selectedCategory != null) {
             selectedCategoriesList.remove(selectedCategory);
         }
     }
@@ -107,40 +111,48 @@ public class MovieController implements Initializable {
     }
 
 
-    public void saveMovieButton(ActionEvent actionEvent) {
-        // Retrieve input values
-        String path = filePath.getText();
-        String title = movieTitle.getText();
-        Double movieRating = rating.getRating();
-        LocalDate lastDate = LocalDate.now();
 
-        try{
-            // Create a Movie object with the provided details
-            Movie myObject = new Movie(title, movieRating, path, lastDate);
-            model.createMovie(myObject);
-            // Associate the movie with selected categories
-            for (String categoryName : selectedCategoriesList) {
-                // Retrieve the Category object based on the category name
-                Category category = model.getCategoryByName(categoryName);
-                if (category != null) {
-                    // Add the created movie to the retrieved category
-                    model.addMovieToCategory(category, myObject);
+        public void saveMovieButton(ActionEvent actionEvent){
+            // Retrieve input values
+
+            String path = filePath.getText();
+            String title = movieTitle.getText();
+            Double movieRating = rating.getRating();
+            LocalDate lastDate = LocalDate.now();
+
+            try {
+                // Create a Movie object with the provided details
+                Movie myObject = new Movie(title, movieRating, path, lastDate);
+                model.createMovie(myObject);
+                // Associate the movie with selected categories
+                for (String categoryName : selectedCategoriesList) {
+                    // Retrieve the Category object based on the category name
+                    Category category = model.getCategoryByName(categoryName);
+                    if (category != null) {
+                        // Add the created movie to the retrieved category
+                        model.addMovieToCategory(category, myObject);
+                    }
                 }
-            }
-        Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
-        stage.close();
+                Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
+                stage.close();
 
-        } catch (MovieException e) {
-            Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
-            e.printStackTrace();
-            a.show();
-        } catch (SQLServerException e) {
-            throw new RuntimeException(e);
+            } catch (MovieException e) {
+                Alert a = new Alert(Alert.AlertType.ERROR, e.getMessage());
+                e.printStackTrace();
+                a.show();
+            } catch (SQLServerException e) {
+                throw new RuntimeException(e);
+
+            }
+            //MainController.updateTable();
         }
+
 
     }
 
 
 
 
-}
+
+
+
