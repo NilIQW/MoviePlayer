@@ -18,35 +18,45 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
+
 public class MainController implements Initializable {
     @FXML
+    public TableColumn titleColumn;
+    @FXML
+    public TableColumn ratingColumn;
+    @FXML
+    public TableColumn lastViewColumn;
+    @FXML
     private ListView<Category> categoryListview;
+
     private Model model;
     @FXML
-    private TableView MoviesTableview;
-    @FXML
-    private TableColumn<Movie, String> titleColumn;
-    @FXML
-    private TableColumn<Movie, Double> ratingColumn;
-    @FXML
-    private TableColumn<Movie, Integer> yearColumn;
+    private TableView<Movie> movieTable;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
+        ObservableList <Movie> data;
+
         categoryListview.setItems(model.getCategoryList());
         try {
+
             model.loadCategories();
-        } catch (SQLServerException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+
 
         // Update the playlistSongsView based on the selected playlist
         categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -68,7 +78,7 @@ public class MainController implements Initializable {
     }
     private void updateTableView(List<Movie> movies) {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
-        MoviesTableview.setItems(observableMovies);
+        movieTable.setItems(observableMovies);
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
@@ -93,6 +103,31 @@ public class MainController implements Initializable {
         dialogPane.setStyle("-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117));");
 
         alert.showAndWait();
+
+    }
+
+    public void updateTable (Category category) {
+        ObservableList<Movie> data = null;
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects song data with song table view
+
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
+
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
+        for(Movie movie : category.getAllMovies() ){
+            data.add(movie);
+       }
+        movieTable.setItems(data);
+
+        // Update TableView with the latest data...
+//        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            if (newSelection != null) {
+//                updateMoviesInMovieTable(newSelection);
+//
+//            }
+        }
+
+
+    private void updateMoviesInMovieTable(Movie newSelection) {
     }
 
 

@@ -3,6 +3,9 @@ package dal;
 import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import gui.Model;
+import gui.controller.MainController;
+import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,8 +15,9 @@ import java.util.List;
 public class MovieDAO implements IMovieDAO{
     private final ConnectionManager connectionManager;
 
-    public MovieDAO(){
+    public MovieDAO() throws SQLException {
         this.connectionManager=new ConnectionManager();
+
     }
 
 
@@ -46,6 +50,7 @@ public class MovieDAO implements IMovieDAO{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     @Override
@@ -125,4 +130,14 @@ public class MovieDAO implements IMovieDAO{
 
         return MoviesInCategory;
     }
+//    public void updateTable() throws SQLException {
+//        ObservableList<Movie> data = null;
+//        ObservableList<Category> categoriesData = null;
+//        try {
+//            data = Model.returnMovieList();
+//            categoriesData = Model.getInstance().getCategoryList();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 }
+

@@ -14,6 +14,9 @@ import java.util.List;
 public class MovieManager {
     IMovieDAO movieDao = new MovieDAO();
 
+    public MovieManager() throws SQLException {
+    }
+
     public void createMovie (Movie movie) throws MovieException {
         if (!isMovieValid(movie))
             throw new MovieException("Movie is incomplete");
