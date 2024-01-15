@@ -52,10 +52,18 @@ public class MainController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                updateTable(newSelection);
+            }
+        });
+
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+
 
 
         // Update the playlistSongsView based on the selected playlist
@@ -107,7 +115,7 @@ public class MainController implements Initializable {
     }
 
     public void updateTable (Category category) {
-        ObservableList<Movie> data = null;
+        ObservableList<Movie> data = FXCollections.observableArrayList();;
         titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects song data with song table view
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
