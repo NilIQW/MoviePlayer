@@ -120,7 +120,7 @@ public class MainController implements Initializable {
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
 
-       // lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
         for(Movie movie : category.getAllMovies() ){
             data.add(movie);
        }
