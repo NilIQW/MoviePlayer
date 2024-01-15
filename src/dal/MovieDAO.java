@@ -100,7 +100,7 @@ public class MovieDAO implements IMovieDAO{
                     "JOIN MovieCategory ON Movie.ID = MovieCategory.MovieId " +
                     "WHERE MovieCategory.CategoryId = ?";
             try (PreparedStatement pt = con.prepareStatement(sql)) {
-                // Set the MovieID parameter in the SQL query to the ID of the current playlist
+                // Set the MovieID parameter in the SQL query to the ID of the current
                 pt.setInt(1, category.getId());
 
                 try (ResultSet rs = pt.executeQuery()) {

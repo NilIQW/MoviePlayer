@@ -18,8 +18,8 @@ public class Category {
         this.name = name;
     }
 
-    public void setAllMovies(List<Movie> songs) {
-        this.allMovies = songs;
+    public void setAllMovies(List<Movie> movies) {
+        this.allMovies = movies;
     }
     public List<Movie> getAllMovies(){
         return allMovies;
