@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.Category;
 import be.Movie;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 
 
@@ -33,11 +35,10 @@ public class MainController implements Initializable {
     @FXML
     private ListView<Category> categoryListview;
 
+    private Model model;
     @FXML
     private TableView<Movie> movieTable;
 
-
-    private static Model model;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -45,20 +46,47 @@ public class MainController implements Initializable {
         ObservableList <Movie> data;
 
         categoryListview.setItems(model.getCategoryList());
-
         try {
 
             model.loadCategories();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
         categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 updateTable(newSelection);
             }
         });
 
+        // Initialize TableView columns
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
 
+
+
+        // Update the playlistSongsView based on the selected playlist
+        categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateMoviesInCat(newValue);
+        });
+
+    }
+
+    private void updateMoviesInCat(Category selectedCategory) {
+        if (selectedCategory != null) {
+            try {
+                List<Movie> moviesInCategory = model.getMoviesInCategory(selectedCategory);
+                // Update TableView with movies in the selected category
+                updateTableView(moviesInCategory);
+            } catch (SQLServerException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    private void updateTableView(List<Movie> movies) {
+        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
+        movieTable.setItems(observableMovies);
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
