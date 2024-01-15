@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Category {
-    private ArrayList<Movie> allMovies;
+    private List<Movie> allMovies;
     private int id;
 
     private String name;
@@ -18,7 +18,7 @@ public class Category {
         this.name = name;
     }
 
-    public void setAllMovies(ArrayList<Movie> songs) {
+    public void setAllMovies(List<Movie> songs) {
         this.allMovies = songs;
     }
     public List<Movie> getAllMovies(){
