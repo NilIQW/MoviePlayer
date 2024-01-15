@@ -45,7 +45,6 @@ public class Model {
     }
 
     public void createMovie(Movie newMovie) throws MovieException {
-        //Movie newMovie = new Movie(title, rating, path, date); //creating movie object
         movieList.add(newMovie);
         movieManager.createMovie(newMovie);
 
@@ -59,7 +58,11 @@ public class Model {
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieManager.addMovieToCategory(category, movie);
     }
-
+    /**
+     * Retrieves a Category from the categoryList based on its name.
+     * @param categoryName The name of the Category to be retrieved.
+     * @return The Category with the specified name.
+     */
     public Category getCategoryByName(String categoryName) throws SQLServerException {
         for (Category category : categoryList) {
             if (category.getName().equals(categoryName)) {
@@ -78,6 +81,7 @@ public class Model {
     public void loadCategories() throws SQLServerException {
         categoryList.clear();
         categoryList.addAll(categoryManager.getAllCategories());
+        //loops through categories and associates them with category, after sets all movies to AllMovies list
         for (Category category : categoryList) {
             List<Movie> moviesInCategory = movieManager.getAllMoviesInCategory(category);
             category.setAllMovies(moviesInCategory);

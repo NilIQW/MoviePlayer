@@ -108,20 +108,22 @@ public class MovieController implements Initializable {
 
 
     public void saveMovieButton(ActionEvent actionEvent) {
-
+        // Retrieve input values
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();
         LocalDate lastDate = LocalDate.now();
 
         try{
+            // Create a Movie object with the provided details
             Movie myObject = new Movie(title, movieRating, path, lastDate);
             model.createMovie(myObject);
+            // Associate the movie with selected categories
             for (String categoryName : selectedCategoriesList) {
+                // Retrieve the Category object based on the category name
                 Category category = model.getCategoryByName(categoryName);
                 if (category != null) {
-
-
+                    // Add the created movie to the retrieved category
                     model.addMovieToCategory(category, myObject);
                 }
             }
