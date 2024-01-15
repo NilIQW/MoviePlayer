@@ -21,12 +21,14 @@ public class NewCategoryController implements Initializable {
 
     public void addCat(ActionEvent event) {
         SaveCategory( event);
+
     }
     public void SaveCategory(ActionEvent event) {
        model.createCategory(textField.getText());
 
        textField.clear();
        closeWindow(event);
+
     }
 
     public void closeWindow(ActionEvent event) {

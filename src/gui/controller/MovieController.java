@@ -7,7 +7,7 @@ import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 
 import gui.DefaultCategories;
-
+import gui.controller.MainController;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,6 +29,7 @@ import org.controlsfx.control.Rating;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
 
@@ -47,6 +48,8 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
     private Model model;
+
+
     public MovieController(){
 
     }
@@ -57,7 +60,7 @@ public class MovieController implements Initializable {
         selectedCategories.setItems(selectedCategoriesList);
         categoryChoice.setItems(DefaultCategories.defaultCategory());
         categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
-
+         MainController controller = new MainController();
     }
 
 
@@ -107,7 +110,7 @@ public class MovieController implements Initializable {
     }
 
 
-    public void saveMovieButton(ActionEvent actionEvent) {
+    public void saveMovieButton(ActionEvent actionEvent) throws SQLException {
 
         String path = filePath.getText();
         String title = movieTitle.getText();
@@ -134,8 +137,9 @@ public class MovieController implements Initializable {
             a.show();
         } catch (SQLServerException e) {
             throw new RuntimeException(e);
-        }
 
+        }
+        //MainController.updateTable();
     }
 
 
