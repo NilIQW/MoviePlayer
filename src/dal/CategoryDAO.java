@@ -76,7 +76,7 @@ public class CategoryDAO implements ICategoryDAO {
 
     public void deleteCategory(int categoryId) {
         try (Connection connection = connectionManager.getConnection();
-             PreparedStatement statement = connection.prepareStatement("DELETE FROM categories WHERE id = ?")) {
+             PreparedStatement statement = connection.prepareStatement("DELETE FROM Category WHERE id = ?")) {
 
             statement.setInt(1, categoryId);
             statement.executeUpdate();

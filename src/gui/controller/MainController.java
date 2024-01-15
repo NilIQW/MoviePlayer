@@ -1,21 +1,21 @@
 package gui.controller;
 
 import be.Category;
+import be.Movie;
 import gui.Model;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.DialogPane;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -23,14 +23,12 @@ public class MainController implements Initializable {
     private ListView<Category> categoryListview;
     private Model model;
 
-    public final void updateModel(){
-        categoryListview.setItems(model.getCategoryList());
-    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         categoryListview.setItems(model.getCategoryList());
         model.loadCategories();
+
     }
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
