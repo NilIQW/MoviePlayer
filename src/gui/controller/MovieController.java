@@ -22,6 +22,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
@@ -48,21 +49,24 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
     private Model model;
-
-
-    public MovieController() {
-
-    }
+    private MainController mainController;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         selectedCategories.setItems(selectedCategoriesList);
+
         categoryChoice.setItems(model.getCategoryList());
         categoryChoice.setValue(model.getCategoryList().get(0));
-        MainController controller = new MainController();
+
+       // MainController controller = new MainController();
+
+
     }
 
+    public void setMainController(MainController mainController) {
+        this.mainController = mainController;
+    }
 
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
@@ -133,6 +137,7 @@ public class MovieController implements Initializable {
                         model.addMovieToCategory(category, myObject);
                     }
                 }
+                model.loadCategories();
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
 
@@ -144,11 +149,12 @@ public class MovieController implements Initializable {
                 throw new RuntimeException(e);
 
             }
-            //MainController.updateTable();
+
         }
 
 
-    }
+
+}
 
 
 

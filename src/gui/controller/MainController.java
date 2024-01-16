@@ -6,6 +6,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,8 +21,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.Collator;
 import java.time.LocalDate;
+
+import java.util.Comparator;
+
 import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -35,6 +41,8 @@ public class MainController implements Initializable {
     @FXML
     public TableColumn lastViewColumn;
     @FXML
+    public ChoiceBox<String> sort;
+    @FXML
     private ListView<Category> categoryListview;
     private Model model;
     @FXML
@@ -42,11 +50,18 @@ public class MainController implements Initializable {
     @FXML
     private TextField filterTextfield;
 
+    private String[] sorting = {"Rating", "Title"};
+    private Category selectedCategory;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sort.getItems().addAll(sorting);
         model = Model.getInstance();
+
         ObservableList<Movie> data;
+
+        //ObservableList<Movie> data;
 
         categoryListview.setItems(model.getCategoryList());
         try {
@@ -58,7 +73,8 @@ public class MainController implements Initializable {
 
         categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
-                updateTable(newSelection);
+                selectedCategory = newSelection;
+                updateTable();
             }
         });
 
@@ -91,12 +107,15 @@ public class MainController implements Initializable {
     private void updateTableView(List<Movie> movies) {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
+
     }
+
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
         MovieController movieController = loader.getController();
+        movieController.setMainController(this);
         Stage stage = new Stage();
         stage.setTitle("Media Player");
         stage.setScene(new Scene(root));
@@ -105,6 +124,11 @@ public class MainController implements Initializable {
 
     public void deleteMovieButton(ActionEvent actionEvent) {
     }
+
+
+    public void deleteMovieCategoryButton(ActionEvent actionEvent) {
+    }
+
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
@@ -117,72 +141,22 @@ public class MainController implements Initializable {
 
     }
 
-    /*private void updateLastViewColumn() {
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        return lastViewColumn.setCellFactory(column -> new TableCell<Movie, LocalDate>(); }
-    @Override
-    protected void updateItem(LocalDate item, boolean empty) {
-        super.updateItem(item, empty);
-        if (item == null || empty) {
-            setText(null);
-            setStyle("");
-        } else {
-        }
-    }*/
 
 
 
-
-    /*public void updateTable(Category category) {
+    public void updateTable() {
         ObservableList<Movie> data = FXCollections.observableArrayList();
-        ;
-        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("title")); //connects song data with song table view
-
-        setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-    }*/
-
-
-    public void updateTable(Category category) {
-        ObservableList<Movie> data = FXCollections.observableArrayList();
-        ;
-        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("title")); //connects song data with song table view
-
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("rating"));
-
-
-        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
-        for (Movie movie : category.getAllMovies()) {
-            data.add(movie);
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastView"));
+        if (selectedCategory != null) {
+            for (Movie movie : selectedCategory.getAllMovies()) {
+                data.add(movie);
+            }
+            movieTable.setItems(data);
         }
-
-//       //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("date"));
-//        for(Movie movie : category.getAllMovies() ){
-//            data.add(movie);
-//      }
-
-        movieTable.setItems(data);
-
-        /* Update TableView with the latest data...
-  //      movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                updateMoviesInMovieTable(newSelection);
-//
-//            }
-
     }
 
-
-        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
-
-    {
-        if (newSelection != null) {
-            updateMoviesInMovieTable(newSelection);
-
-
-        }
-
-         */
-    }
     public void filterButton(ActionEvent actionEvent) throws SQLServerException {
         String filterText = filterTextfield.getText().toLowerCase().trim();
         ObservableList<Movie> filteredMovies = FXCollections.observableArrayList();
@@ -236,9 +210,10 @@ public class MainController implements Initializable {
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
     }
+
+
+
+
 }
-
-
-
 
 
