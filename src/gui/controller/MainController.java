@@ -71,12 +71,12 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        /*categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedCategory = newSelection;
                 updateTable();
             }
-        });
+        });*/
 
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -146,7 +146,7 @@ public class MainController implements Initializable {
 
 
 
-    public void updateTable() {
+   /* public void updateTable() {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -157,7 +157,7 @@ public class MainController implements Initializable {
             }
             movieTable.setItems(data);
         }
-    }
+    }*/
 
     public void filterButton(ActionEvent actionEvent) throws SQLServerException {
         String filterText = filterTextfield.getText().toLowerCase().trim();
@@ -180,7 +180,7 @@ public class MainController implements Initializable {
                 }}
             }
         }
-
+        handleSort(sort.getValue(),filteredMovies);
         // Update the TableView with the filtered movies
         updateTableView(filteredMovies);
     }
@@ -214,21 +214,27 @@ public class MainController implements Initializable {
     }
     private void handleSort (String selectedSort){
         if (selectedSort.equals("Rating")) {
-            sortMoviesByRating();
+            sortMoviesByRating(movieTable.getItems());
         } else if (selectedSort.equals("Title")) {
-            sortMoviesByTitle();
+            sortMoviesByTitle(movieTable.getItems());
         }
     }
 
-    public void sortMoviesByRating () {
-        ObservableList<Movie> ratingSorting = movieTable.getItems();
+    private void handleSort (String selectedSort, ObservableList<Movie> Sorting){
+        if (selectedSort.equals("Rating")) {
+            sortMoviesByRating(Sorting);
+        } else if (selectedSort.equals("Title")) {
+            sortMoviesByTitle(Sorting);
+        }
+    }
+
+    public void sortMoviesByRating (ObservableList<Movie> ratingSorting) {
         ratingSorting.sort(Comparator.comparingDouble(Movie::getRating));
         movieTable.setItems(ratingSorting);
 
     }
 
-    public void sortMoviesByTitle () {
-        ObservableList<Movie> titleSorting = movieTable.getItems();
+    public void sortMoviesByTitle (ObservableList<Movie> titleSorting) {
         Collator collator = Collator.getInstance();
         titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
         movieTable.setItems(titleSorting);
