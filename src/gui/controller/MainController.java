@@ -90,17 +90,19 @@ public class MainController implements Initializable {
             updateMoviesInCat(newValue);
         });
 
+        sort.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                handleSort(newValue);
+            }
+        });
+
     }
 
     private void updateMoviesInCat(Category selectedCategory) {
         if (selectedCategory != null) {
-            try {
-                List<Movie> moviesInCategory = model.getMoviesInCategory(selectedCategory);
-                // Update TableView with movies in the selected category
-                updateTableView(moviesInCategory);
-            } catch (SQLServerException e) {
-                throw new RuntimeException(e);
-            }
+            List<Movie> moviesInCategory = selectedCategory.getAllMovies();
+            // Update TableView with movies in the selected category
+            updateTableView(moviesInCategory);
         }
     }
 
@@ -210,7 +212,28 @@ public class MainController implements Initializable {
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
     }
+    private void handleSort (String selectedSort){
+        if (selectedSort.equals("Rating")) {
+            sortMoviesByRating();
+        } else if (selectedSort.equals("Title")) {
+            sortMoviesByTitle();
+        }
+    }
 
+    public void sortMoviesByRating () {
+        ObservableList<Movie> ratingSorting = movieTable.getItems();
+        ratingSorting.sort(Comparator.comparingDouble(Movie::getRating));
+        movieTable.setItems(ratingSorting);
+
+    }
+
+    public void sortMoviesByTitle () {
+        ObservableList<Movie> titleSorting = movieTable.getItems();
+        Collator collator = Collator.getInstance();
+        titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
+        movieTable.setItems(titleSorting);
+
+    }
 
 
 

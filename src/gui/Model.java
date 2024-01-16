@@ -123,9 +123,7 @@ public class Model {
         movieList.clear();
         movieList.addAll(movieManager.getAllMovies());
     }
-    public List<Movie> getMoviesInCategory(Category category) throws SQLServerException {
-        return movieManager.getAllMoviesInCategory(category);
-    }
+
 
 
 
