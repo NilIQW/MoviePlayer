@@ -8,6 +8,9 @@ import bll.MovieManager;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -36,7 +39,7 @@ public class Model {
         movieManager = new MovieManager();
         categoryManager = new CategoryManager();
 
-    }   //getAllCategories();
+    }
 
 
 
@@ -61,9 +64,28 @@ public class Model {
     }
     public void createCategory(String name){
         Category newCategory = new Category(name);
-        categoryList.add(newCategory);
-        categoryManager.addCategory(newCategory);
+        if(!categoryExists(newCategory)) {
+            categoryList.add(newCategory);
+            categoryManager.addCategory(newCategory);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.NONE, "Category already exists", ButtonType.OK);
+            alert.setTitle("Unsuccessful");
 
+            DialogPane dialogPane = alert.getDialogPane();
+            dialogPane.setStyle("-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117));");
+
+            alert.showAndWait();
+        }
+    }
+    public boolean categoryExists(Category category) {
+        List<Category> existingCategories = categoryList;
+
+        for (Category existingCategory : existingCategories) {
+            if (existingCategory.getName().equals(category.getName())) {
+                return true;
+            }
+        }
+        return false;
     }
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieManager.addMovieToCategory(category, movie);
@@ -98,10 +120,6 @@ public class Model {
         }
     }
 
-    public void getAllCategories() {
-        CategoryManager categoryManager = new CategoryManager();
-        categoryManager.getAllCategories();
-    }
     public static void loadMovies() throws SQLException {
         movieList.clear();
         movieList.addAll(movieManager.getAllMovies());

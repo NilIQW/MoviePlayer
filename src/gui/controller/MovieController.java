@@ -57,7 +57,7 @@ public class MovieController implements Initializable {
         selectedCategories.setItems(selectedCategoriesList);
         categoryChoice.setItems(DefaultCategories.defaultCategory());
         categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
-        MainController controller = new MainController();
+       // MainController controller = new MainController();
 
     }
 
@@ -134,6 +134,7 @@ public class MovieController implements Initializable {
                         model.addMovieToCategory(category, myObject);
                     }
                 }
+                model.loadCategories();
                 Stage stage = (Stage) ((Node) actionEvent.getSource()).getScene().getWindow();
                 stage.close();
 
@@ -145,7 +146,7 @@ public class MovieController implements Initializable {
                 throw new RuntimeException(e);
 
             }
-            //MainController.updateTable();
+
         }
 
 
