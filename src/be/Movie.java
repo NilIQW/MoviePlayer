@@ -8,6 +8,7 @@ public class Movie {
     private Double rating;
     private String path;
     private LocalDate date;
+    private Category category;
 
     public Movie(String title, Double rating, String path, LocalDate date){
         this.title = title;
@@ -54,5 +55,13 @@ public class Movie {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

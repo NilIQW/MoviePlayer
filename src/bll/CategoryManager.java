@@ -14,6 +14,10 @@ public class CategoryManager {
 
     }
 
+    public void deleteCategory(int id){
+        categoryDAO.deleteCategory(id);
+    }
+
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }

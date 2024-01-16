@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 public class Model {
     static MovieManager movieManager;
-    CategoryManager categoryManager;
+    private CategoryManager categoryManager;
     private final static Model instance;//ensures that by using Singelton all controllers use the same model
 
     static {
@@ -41,10 +41,9 @@ public class Model {
         categoryManager = new CategoryManager();
 
     }
-
-
-
-
+    public CategoryManager getCategoryManager() {
+        return categoryManager;
+    }
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
@@ -52,7 +51,6 @@ public class Model {
         loadMovies();
         return movieList;
     }
-
 
     public static Model getInstance() {
         return instance;
@@ -127,13 +125,6 @@ public class Model {
     }
     public List<Movie> getMoviesInCategory(Category category) throws SQLServerException {
         return movieManager.getAllMoviesInCategory(category);
-    }
-    public List<Movie> filterMoviesByTitle(String titleFilter) {
-        List<Movie> allMovies = movieList;
-
-        return allMovies.stream()
-                .filter(movie -> movie.getTitle().toLowerCase().contains(titleFilter))
-                .collect(Collectors.toList());
     }
 
 

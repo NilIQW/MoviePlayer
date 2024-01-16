@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -63,8 +64,9 @@ public class MainController implements Initializable {
 
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        //updateLastViewColumn();
 
 
         // Update the playlistSongsView based on the selected playlist
@@ -104,9 +106,6 @@ public class MainController implements Initializable {
     public void deleteMovieButton(ActionEvent actionEvent) {
     }
 
-    public void deleteMovieCategoryButton(ActionEvent actionEvent) {
-    }
-
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
         alert.setTitle("Attention");
@@ -118,6 +117,31 @@ public class MainController implements Initializable {
 
     }
 
+    /*private void updateLastViewColumn() {
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        return lastViewColumn.setCellFactory(column -> new TableCell<Movie, LocalDate>(); }
+    @Override
+    protected void updateItem(LocalDate item, boolean empty) {
+        super.updateItem(item, empty);
+        if (item == null || empty) {
+            setText(null);
+            setStyle("");
+        } else {
+        }
+    }*/
+
+
+
+
+    /*public void updateTable(Category category) {
+        ObservableList<Movie> data = FXCollections.observableArrayList();
+        ;
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("title")); //connects song data with song table view
+
+        setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }*/
+
+
     public void updateTable(Category category) {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         ;
@@ -125,43 +149,71 @@ public class MainController implements Initializable {
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("rating"));
 
+
         //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
         for (Movie movie : category.getAllMovies()) {
             data.add(movie);
         }
+
+//       //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("date"));
+//        for(Movie movie : category.getAllMovies() ){
+//            data.add(movie);
+//      }
+
         movieTable.setItems(data);
 
-        // Update TableView with the latest data...
-//        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        /* Update TableView with the latest data...
+  //      movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 //            if (newSelection != null) {
 //                updateMoviesInMovieTable(newSelection);
 //
 //            }
+
     }
 
 
-    private void updateMoviesInMovieTable(Movie newSelection) {
-    }
+        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
+
+    {
+        if (newSelection != null) {
+            updateMoviesInMovieTable(newSelection);
 
 
-    public void filterButton(ActionEvent actionEvent) {
-        String filterText = filterTextfield.getText().toLowerCase();
-
-        if (filterText.isEmpty()) {
-            // If the filter text is empty, show all movies
-            updateMoviesInCat(categoryListview.getSelectionModel().getSelectedItem());
-        } else {
-            // Filter movies based on the entered text
-            List<Movie> filteredMovies = model.filterMoviesByTitle(filterText);
-
-            // Update TableView with the filtered movies
-            updateTableView(filteredMovies);
         }
+
+         */
+    }
+    public void filterButton(ActionEvent actionEvent) throws SQLServerException {
+        String filterText = filterTextfield.getText().toLowerCase().trim();
+        ObservableList<Movie> filteredMovies = FXCollections.observableArrayList();
+
+        for (Category category : model.getCategoryList()) {
+            String categoryName = category.getName().toLowerCase();
+
+            // Check if the filter text matches the category name
+            if (categoryName.contains(filterText)) {
+                // Add all movies in the matching category to the filtered list
+                filteredMovies.addAll(category.getAllMovies());
+            } else {
+                for (Movie movie : category.getAllMovies()) {
+                String title = movie.getTitle().toLowerCase();
+                String rating = String.valueOf(movie.getRating()).toLowerCase();
+
+                if (title.contains(filterText) || rating.contains(filterText)) {
+                    filteredMovies.add(movie);
+                }}
+            }
+        }
+
+        // Update the TableView with the filtered movies
+        updateTableView(filteredMovies);
     }
 
-    public void PlayButton(ActionEvent actionEvent) {
+
+
+    public void playButton(ActionEvent actionEvent) {
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
-        if(selectedMovie!=null){
+        if (selectedMovie != null) {
             String filepath = selectedMovie.getPath();
             playMovie(filepath);
         }
@@ -178,4 +230,15 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
+
+    public void deleteCategory(ActionEvent actionEvent) { //this method might need additional work
+        Category selectedCategory = categoryListview.getSelectionModel().getSelectedItem();
+        model.getCategoryManager().deleteCategory(selectedCategory.getId());
+        model.getCategoryList().remove(selectedCategory);
+    }
 }
+
+
+
+
+
