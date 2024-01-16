@@ -130,14 +130,6 @@ public class MovieDAO implements IMovieDAO{
 
         return MoviesInCategory;
     }
-//    public void updateTable() throws SQLException {
-//        ObservableList<Movie> data = null;
-//        ObservableList<Category> categoriesData = null;
-//        try {
-//            data = Model.returnMovieList();
-//            categoriesData = Model.getInstance().getCategoryList();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
+
 }
 

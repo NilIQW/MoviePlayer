@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -61,8 +62,10 @@ public class MainController implements Initializable {
 
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+         updateLastViewColumn();
+
 
 
 
@@ -71,7 +74,7 @@ public class MainController implements Initializable {
             updateMoviesInCat(newValue);
         });
 
-    }
+                }
 
     private void updateMoviesInCat(Category selectedCategory) {
         if (selectedCategory != null) {
@@ -113,30 +116,55 @@ public class MainController implements Initializable {
         alert.showAndWait();
 
     }
+    private void updateLastViewColumn() {
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        lastViewColumn.setCellFactory(column -> new TableCell<Movie, LocalDate>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
 
+                    setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                }
+            }
+        });
+    }
     public void updateTable (Category category) {
         ObservableList<Movie> data = FXCollections.observableArrayList();;
         titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects song data with song table view
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
 
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
-        for(Movie movie : category.getAllMovies() ){
-            data.add(movie);
-       }
+//       //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("date"));
+//        for(Movie movie : category.getAllMovies() ){
+//            data.add(movie);
+//      }
+
         movieTable.setItems(data);
 
-        // Update TableView with the latest data...
-//        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+        /* Update TableView with the latest data...
+  //      movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 //            if (newSelection != null) {
 //                updateMoviesInMovieTable(newSelection);
 //
 //            }
+
+        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) ->
+
+    {
+        if (newSelection != null) {
+            updateMoviesInMovieTable(newSelection);
+
+
         }
 
+        private void updateMoviesInMovieTable(Movie newSelection){
+    }*/
 
-    private void updateMoviesInMovieTable(Movie newSelection) {
+
+
     }
-
-
-}
+    }
