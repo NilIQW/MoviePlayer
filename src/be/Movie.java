@@ -9,12 +9,14 @@ public class Movie {
     private String path;
     private LocalDate date;
     private Category category;
+    private LocalDate lastViewDate;
 
     public Movie(String title, Double rating, String path, LocalDate date){
         this.title = title;
         this.rating = rating;
         this.path = path;
         this.date = date;
+        this.lastViewDate = null;
     }
 
     public int getId() {
@@ -64,4 +66,12 @@ public class Movie {
     public void setCategory(Category category) {
         this.category = category;
     }
+    public LocalDate getLastViewDate() {
+        return lastViewDate;
+    }
+
+    public void setLastViewDate(LocalDate lastViewDate) {
+        this.lastViewDate = lastViewDate;
+    }
 }
+

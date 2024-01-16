@@ -71,18 +71,13 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
 
-        /*categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedCategory = newSelection;
-                updateTable();
-            }
-        });*/
+
 
         // Initialize TableView columns
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
-        //updateLastViewColumn();
+
+        updateLastViewColumn();
 
 
         // Update the playlistSongsView based on the selected playlist
@@ -143,21 +138,27 @@ public class MainController implements Initializable {
 
     }
 
-
-
-
-   /* public void updateTable() {
-        ObservableList<Movie> data = FXCollections.observableArrayList();
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastView"));
-        if (selectedCategory != null) {
-            for (Movie movie : selectedCategory.getAllMovies()) {
-                data.add(movie);
+    private void updateLastViewColumn() {
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
+        lastViewColumn.setCellFactory(column -> new TableCell<Movie, LocalDate>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    // Format the date for display
+                    setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                }
             }
-            movieTable.setItems(data);
-        }
-    }*/
+        });
+    }
+
+
+
+
+
 
     public void filterButton(ActionEvent actionEvent) throws SQLServerException {
         String filterText = filterTextfield.getText().toLowerCase().trim();
@@ -196,12 +197,15 @@ public class MainController implements Initializable {
     }
 
     private void playMovie(String filePath) {
-        // TODO: Implement code to open the default media player with the specified file
-        // You can use java.awt.Desktop or other platform-specific methods
-        // For simplicity, I'll provide a basic example using java.awt.Desktop
-
         try {
-            java.awt.Desktop.getDesktop().open(new File(filePath));
+            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+            if (selectedMovie != null) {
+                selectedMovie.setLastViewDate(LocalDate.now()); // Update last view date
+                java.awt.Desktop.getDesktop().open(new File(filePath));
+
+                // Update the TableView if necessary
+                movieTable.refresh();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
