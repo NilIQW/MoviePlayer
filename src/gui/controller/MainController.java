@@ -6,6 +6,7 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.Collator;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -33,17 +36,24 @@ public class MainController implements Initializable {
     @FXML
     public TableColumn lastViewColumn;
     @FXML
+    public ChoiceBox <String> sort;
+    @FXML
     private ListView<Category> categoryListview;
 
     private Model model;
     @FXML
     private TableView<Movie> movieTable;
 
+    private String[] sorting = {"Rating", "Title"};
+
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        sort.getItems().addAll(sorting);
         model = Model.getInstance();
         ObservableList <Movie> data;
+
 
         categoryListview.setItems(model.getCategoryList());
         try {
@@ -58,22 +68,29 @@ public class MainController implements Initializable {
                 updateTable(newSelection);
             }
         });
+        sort.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                handleSort(newValue);
+            }
+         });
 
         // Initialize TableView columns
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+       // titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         //ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
 
 
 
         // Update the playlistSongsView based on the selected playlist
-        categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateMoviesInCat(newValue);
-        });
+       // categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+        //    updateMoviesInCat(newValue);
+            // });
+
+
 
     }
 
-    private void updateMoviesInCat(Category selectedCategory) {
+    /*private void updateMoviesInCat(Category selectedCategory) {
         if (selectedCategory != null) {
             try {
                 List<Movie> moviesInCategory = model.getMoviesInCategory(selectedCategory);
@@ -87,12 +104,13 @@ public class MainController implements Initializable {
     private void updateTableView(List<Movie> movies) {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
-    }
+    }*/
 
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
         MovieController movieController = loader.getController();
+        movieController.setMainController(this);
         Stage stage = new Stage();
         stage.setTitle("Media Player");
         stage.setScene(new Scene(root));
@@ -115,28 +133,45 @@ public class MainController implements Initializable {
     }
 
     public void updateTable (Category category) {
-        ObservableList<Movie> data = FXCollections.observableArrayList();;
-        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects song data with song table view
+        ObservableList<Movie> data = FXCollections.observableArrayList();
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects movie data with song table view
 
         ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
 
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
+        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
         for(Movie movie : category.getAllMovies() ){
             data.add(movie);
        }
         movieTable.setItems(data);
 
-        // Update TableView with the latest data...
-//        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-//            if (newSelection != null) {
-//                updateMoviesInMovieTable(newSelection);
-//
-//            }
         }
 
 
     private void updateMoviesInMovieTable(Movie newSelection) {
     }
+    public void sortMoviesByRating(){
+        ObservableList<Movie> ratingSorting = movieTable.getItems();
+        ratingSorting.sort(Comparator.comparingDouble(Movie :: getRating));
+        movieTable.setItems(ratingSorting);
+
+    }
+    public void sortMoviesByTitle(){
+        ObservableList<Movie> titleSorting = movieTable.getItems();
+        Collator collator = Collator.getInstance();
+        titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
+        movieTable.setItems(titleSorting);
+
+    }
+    private void handleSort(String selectedSort) {
+        if (selectedSort.equals("Rating")) {
+            sortMoviesByRating();
+        } else if (selectedSort.equals("Title")) {
+            sortMoviesByTitle();
+        }
+    }
+
+
+
 
 
 }

@@ -68,6 +68,6 @@
             </Button>
          </children>
       </HBox>
-      <Rating fx:id="rating" layoutX="204.0" layoutY="400.0" rating="0.0" />
+      <Rating fx:id="rating" layoutX="204.0" layoutY="400.0" partialRating="true" rating="0.0" />
    </children>
 </AnchorPane>
