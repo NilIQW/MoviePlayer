@@ -16,6 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -34,16 +35,17 @@ public class MainController implements Initializable {
     public TableColumn lastViewColumn;
     @FXML
     private ListView<Category> categoryListview;
-
     private Model model;
     @FXML
     private TableView<Movie> movieTable;
+    @FXML
+    private TextField filterTextfield;
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
-        ObservableList <Movie> data;
+        ObservableList<Movie> data;
 
         categoryListview.setItems(model.getCategoryList());
         try {
@@ -65,7 +67,6 @@ public class MainController implements Initializable {
         //yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
 
 
-
         // Update the playlistSongsView based on the selected playlist
         categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             updateMoviesInCat(newValue);
@@ -84,6 +85,7 @@ public class MainController implements Initializable {
             }
         }
     }
+
     private void updateTableView(List<Movie> movies) {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
@@ -98,12 +100,14 @@ public class MainController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+
     public void deleteMovieButton(ActionEvent actionEvent) {
     }
+
     public void deleteMovieCategoryButton(ActionEvent actionEvent) {
     }
 
-    public void showAlert(){
+    public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
         alert.setTitle("Attention");
 
@@ -114,16 +118,17 @@ public class MainController implements Initializable {
 
     }
 
-    public void updateTable (Category category) {
-        ObservableList<Movie> data = FXCollections.observableArrayList();;
-        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie,String>("title")); //connects song data with song table view
+    public void updateTable(Category category) {
+        ObservableList<Movie> data = FXCollections.observableArrayList();
+        ;
+        titleColumn.setCellValueFactory(new PropertyValueFactory<Movie, String>("title")); //connects song data with song table view
 
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie,Integer>("rating"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<Movie, Integer>("rating"));
 
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
-        for(Movie movie : category.getAllMovies() ){
+        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<Movie, LocalDate>("lastView"));
+        for (Movie movie : category.getAllMovies()) {
             data.add(movie);
-       }
+        }
         movieTable.setItems(data);
 
         // Update TableView with the latest data...
@@ -132,11 +137,45 @@ public class MainController implements Initializable {
 //                updateMoviesInMovieTable(newSelection);
 //
 //            }
-        }
+    }
 
 
     private void updateMoviesInMovieTable(Movie newSelection) {
     }
 
 
+    public void filterButton(ActionEvent actionEvent) {
+        String filterText = filterTextfield.getText().toLowerCase();
+
+        if (filterText.isEmpty()) {
+            // If the filter text is empty, show all movies
+            updateMoviesInCat(categoryListview.getSelectionModel().getSelectedItem());
+        } else {
+            // Filter movies based on the entered text
+            List<Movie> filteredMovies = model.filterMoviesByTitle(filterText);
+
+            // Update TableView with the filtered movies
+            updateTableView(filteredMovies);
+        }
+    }
+
+    public void PlayButton(ActionEvent actionEvent) {
+        Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+        if(selectedMovie!=null){
+            String filepath = selectedMovie.getPath();
+            playMovie(filepath);
+        }
+    }
+
+    private void playMovie(String filePath) {
+        // TODO: Implement code to open the default media player with the specified file
+        // You can use java.awt.Desktop or other platform-specific methods
+        // For simplicity, I'll provide a basic example using java.awt.Desktop
+
+        try {
+            java.awt.Desktop.getDesktop().open(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

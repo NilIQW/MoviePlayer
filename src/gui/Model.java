@@ -14,6 +14,7 @@ import javafx.scene.control.DialogPane;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Model {
     static MovieManager movieManager;
@@ -127,6 +128,15 @@ public class Model {
     public List<Movie> getMoviesInCategory(Category category) throws SQLServerException {
         return movieManager.getAllMoviesInCategory(category);
     }
+    public List<Movie> filterMoviesByTitle(String titleFilter) {
+        List<Movie> allMovies = movieList;
+
+        return allMovies.stream()
+                .filter(movie -> movie.getTitle().toLowerCase().contains(titleFilter))
+                .collect(Collectors.toList());
+    }
+
+
 
 
 

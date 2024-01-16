@@ -58,8 +58,8 @@ public class MovieController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
         selectedCategories.setItems(selectedCategoriesList);
-        categoryChoice.setItems(DefaultCategories.defaultCategory());
-        categoryChoice.setValue(DefaultCategories.defaultCategory().get(0));
+        categoryChoice.setItems(model.getCategoryList());
+        categoryChoice.setValue(model.getCategoryList().get(0));
         MainController controller = new MainController();
     }
 
