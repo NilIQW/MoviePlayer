@@ -40,7 +40,7 @@
       <ListView fx:id="selectedCategories" layoutX="204.0" layoutY="259.0" prefHeight="93.0" prefWidth="176.0" style="-fx-background-color: #FF000050;" />
       <Button fx:id="removeCategory" layoutX="403.0" layoutY="259.0" mnemonicParsing="false" onAction="#removeCategoryButton" styleClass="removeCategory" stylesheets="@style2.css" text="Remove" textFill="WHITE" />
       <Button fx:id="openFile" layoutX="390.0" layoutY="95.0" mnemonicParsing="false" onAction="#openFileButton" styleClass="openFileButton" stylesheets="@style2.css" text="...." textFill="WHITE" />
-      <TextField fx:id="filePath" alignment="CENTER" layoutX="204.0" layoutY="96.0" styleClass="filePathInput-box" stylesheets="@style2.css">
+      <TextField fx:id="filePath" alignment="CENTER" layoutX="204.0" layoutY="96.0" styleClass="list-cell" stylesheets="@style2.css">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>

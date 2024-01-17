@@ -51,3 +51,10 @@
     -fx-background-color: #2a363b;
     -fx-background-radius: 10;
 }
+
+.list-cell {
+    -fx-background-color: transparent;
+}
+.table-cell {
+    -fx-background-color: transparent;
+}

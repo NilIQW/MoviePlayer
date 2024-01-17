@@ -37,7 +37,8 @@
             </Text>
          </children>
       </HBox>
-      <ListView fx:id="categoryListview" layoutX="21.0" layoutY="136.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" />
+      <ListView fx:id="categoryListview" layoutX="21.0" layoutY="136.0" prefHeight="430.0" prefWidth="170.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" styleClass="filePathInput-box" stylesheets="@style.css" />
+
       <HBox layoutX="11.0" layoutY="28.0" prefHeight="48.0" prefWidth="17.0">
          <children>
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Library" wrappingWidth="51.17612075805664">
@@ -47,9 +48,9 @@
             </Text>
          </children>
       </HBox>
-      <TableView fx:id="movieTable" layoutX="206.0" layoutY="136.0" prefHeight="430.0" prefWidth="269.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;">
+      <TableView fx:id="movieTable" layoutX="206.0" layoutY="136.0" prefHeight="430.0" prefWidth="269.0" style="-fx-background-color: #FF000040; -fx-background-radius: 20;" stylesheets="@style.css" >
         <columns>
-          <TableColumn fx:id="titleColumn" prefWidth="103.99995422363281" style="-fx-background-color: #ef4a4a;" text="Title" />
+          <TableColumn fx:id="titleColumn" prefWidth="103.99995422363281" style="-fx-background-color:#ef4a4a ;" text="Title" />
           <TableColumn fx:id="ratingColumn" prefWidth="60.0" style="-fx-background-color: #ef4a4a;" text="Rating" />
             <TableColumn fx:id="lastViewColumn" prefWidth="102.6666259765625" style="-fx-background-color: #ef4a4a;" text="Last View" />
         </columns>
