@@ -124,6 +124,10 @@ public class Model {
         movieList.addAll(movieManager.getAllMovies());
     }
 
+    public void updateMovieRating(Movie movie) throws SQLServerException {
+        movieManager.updateMovieRating(movie);
+    }
+
 
 
 

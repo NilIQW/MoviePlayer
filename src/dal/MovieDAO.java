@@ -3,20 +3,17 @@ package dal;
 import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import gui.Model;
-import gui.controller.MainController;
-import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDAO implements IMovieDAO{
+public class MovieDAO implements IMovieDAO {
     private final ConnectionManager connectionManager;
 
     public MovieDAO() throws SQLException {
-        this.connectionManager=new ConnectionManager();
+        this.connectionManager = new ConnectionManager();
 
     }
 
@@ -25,8 +22,8 @@ public class MovieDAO implements IMovieDAO{
      * Creates a new movie record in the database.
      *
      * @param m The Movie object containing details to be stored in the database.
-     * */
-     @Override
+     */
+    @Override
     public void createMovie(Movie m) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
             // Step 1: Define SQL query for inserting a new movie record
@@ -43,7 +40,7 @@ public class MovieDAO implements IMovieDAO{
                 if (keys.next()) {
                     // Step 7: Retrieve the generated key and set it in the Movie object
                     long generatedKey = keys.getLong(1);
-                    m.setId((int)generatedKey);
+                    m.setId((int) generatedKey);
 
                 }
             }
@@ -55,9 +52,9 @@ public class MovieDAO implements IMovieDAO{
 
     @Override
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
-        try(Connection con = connectionManager.getConnection()){
+        try (Connection con = connectionManager.getConnection()) {
             String sql = "INSERT INTO MovieCategory ( MovieId, CategoryId) VALUES (?,?)";
-            try(PreparedStatement pt = con.prepareStatement(sql)){
+            try (PreparedStatement pt = con.prepareStatement(sql)) {
                 pt.setInt(1, movie.getId());
                 pt.setInt(2, category.getId());
                 pt.execute();
@@ -66,14 +63,15 @@ public class MovieDAO implements IMovieDAO{
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public List<Movie> getAllMovies() throws SQLException {
-        List <Movie> movies = new ArrayList<>();
-        try(Connection con = connectionManager.getConnection()){
+        List<Movie> movies = new ArrayList<>();
+        try (Connection con = connectionManager.getConnection()) {
             String sql = "SELECT * FROM Movie";
             Statement st = con.createStatement();
             ResultSet rs = st.executeQuery(sql);
-            while(rs.next()){
+            while (rs.next()) {
 
                 String title = rs.getString("name");
                 Double rating = rs.getDouble("rating");
@@ -85,17 +83,17 @@ public class MovieDAO implements IMovieDAO{
                 LocalDate lastView = sqlDate.toLocalDate();
 
 
-                Movie m = new Movie(title,rating,path, lastView);
+                Movie m = new Movie(title, rating, path, lastView);
                 movies.add(m);
 
             }
             return movies;
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
     }
+
     @Override
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         ArrayList<Movie> MoviesInCategory = new ArrayList<>();
@@ -110,6 +108,7 @@ public class MovieDAO implements IMovieDAO{
 
                 try (ResultSet rs = pt.executeQuery()) {
                     while (rs.next()) {
+                        int movieId = rs.getInt("MovieId");
                         String title = rs.getString("name");
                         Double rating = rs.getDouble("rating");
                         String path = rs.getString("filelink");
@@ -119,7 +118,8 @@ public class MovieDAO implements IMovieDAO{
                         LocalDate lastView = sqlDate.toLocalDate();
 
 
-                        Movie m = new Movie(title,rating,path, lastView);
+                        Movie m = new Movie(title, rating, path, lastView);
+                        m.setId(movieId);
                         MoviesInCategory.add(m);
                     }
                 }
@@ -131,5 +131,32 @@ public class MovieDAO implements IMovieDAO{
         return MoviesInCategory;
     }
 
+    @Override
+    public void updateMovieRating(Movie m)throws SQLServerException {
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "UPDATE Movie SET rating = ? WHERE id = ?";
+            try (PreparedStatement pt = con.prepareStatement(sql)) {
+                pt.setDouble(1, m.getRating());
+                pt.setInt(2, m.getId());
+                pt.executeUpdate();
+            }
+
+            // Fetch the updated movie with the correct rating
+            String selectSql = "SELECT * FROM Movie WHERE id = ?";
+            try (PreparedStatement selectPt = con.prepareStatement(selectSql)) {
+                selectPt.setInt(1, m.getId());
+                ResultSet rs = selectPt.executeQuery();
+
+                if (rs.next()) {
+                    Double updatedRating = rs.getDouble("rating");
+                    // Update the rating in the Movie object
+                    m.setRating(updatedRating);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
 

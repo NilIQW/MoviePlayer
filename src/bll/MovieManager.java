@@ -27,6 +27,9 @@ public class MovieManager {
         }
 
     }
+    public void updateMovieRating(Movie movie) throws SQLServerException {
+        movieDao.updateMovieRating(movie);
+    }
     private boolean isMovieValid (Movie movie){
         return movie != null && !movie.getTitle().isEmpty() && movie.getRating() >= 0 && !movie.getPath().isEmpty();
 

@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import org.controlsfx.control.Rating;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,10 @@ public class MainController implements Initializable {
     @FXML
     public ChoiceBox<String> sort;
     @FXML
+    public Label selectedMovie;
+    @FXML
+    public Rating selectedMovieRating;
+    @FXML
     private ListView<Category> categoryListview;
     private Model model;
     @FXML
@@ -46,16 +51,18 @@ public class MainController implements Initializable {
     private TextField filterTextfield;
 
     private String[] sorting = {"Rating", "Title"};
+    @FXML
     private Category selectedCategory;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
 
-        initializeTableviewColumns();
+        //initializeTableviewColumns();
         initializeCategorySelection();
         setupSortChangeListener();
         loadCategoriesToListView();
+        initializeSelectedSong();
     }
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
@@ -83,7 +90,17 @@ public class MainController implements Initializable {
             }
         });
     }
-    public void initializeTableviewColumns(){
+    public void initializeSelectedSong(){
+        movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                editMovieRating();
+            }
+        });
+
+    }
+
+
+   /*public void initializeTableviewColumns(){
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
@@ -95,7 +112,7 @@ public class MainController implements Initializable {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
 
-    }
+    }*/
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -172,7 +189,8 @@ public class MainController implements Initializable {
         if(sort.getValue()!= null){
         handleSort(sort.getValue(),filteredMovies);}
         // Update the TableView with the filtered movies
-        updateTableView(filteredMovies);
+       // updateTableView(filteredMovies);
+        movieTable.setItems(filteredMovies);
     }
     public void playButton(ActionEvent actionEvent) {
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
@@ -228,7 +246,28 @@ public class MainController implements Initializable {
 
     }
 
+    public void editMovieRating(){
+        Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
+        selectedMovie.setText(selectedM.getTitle());
+        selectedMovieRating.setRating(selectedM.getRating());
+    }
 
+
+    public void changeRatingButton(ActionEvent actionEvent) throws SQLServerException {
+        Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
+
+        if (selectedM != null) {
+            System.out.println(selectedM.getId());
+            System.out.println(selectedM.getRating());
+
+            double newRating = selectedMovieRating.getRating();
+            selectedM.setRating(newRating);
+            model.updateMovieRating(selectedM);
+            movieTable.refresh();
+
+        }
+
+    }
 
 }
 

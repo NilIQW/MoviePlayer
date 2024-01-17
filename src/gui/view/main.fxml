@@ -16,7 +16,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.controlsfx.control.Rating?>
 
-<AnchorPane prefHeight="599.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117)); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
+<AnchorPane prefHeight="599.0" prefWidth="877.0" style="-fx-background-color: linear-gradient(rgb(254, 102, 125), rgb(255, 163, 117)); -fx-background-radius: 10;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.controller.MainController">
    <children>
       <HBox alignment="CENTER" layoutY="-2.0" prefHeight="54.0" prefWidth="877.0" style="-fx-background-color: #212121;">
          <children>
@@ -54,11 +54,10 @@
             <TableColumn fx:id="lastViewColumn" prefWidth="102.6666259765625" style="-fx-background-color: #ef4a4a;" text="Last View" />
         </columns>
       </TableView>
-      <Label layoutX="658.0" layoutY="351.0" text="Rating:">
+      <Label layoutX="652.0" layoutY="323.0" text="Rating:">
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="617.0" layoutY="256.0" text="Selected movie name:" />
       <Button fx:id="addMovie" layoutX="27.0" layoutY="65.0" mnemonicParsing="false" onAction="#addMovieButton" style="-fx-background-color: #FF000040; -fx-background-radius: 10;" text="Add movie" />
       <Label layoutX="33.0" layoutY="103.0" text="Category">
          <font>
@@ -68,7 +67,7 @@
          <font>
             <Font name="Arial Bold" size="14.0" />
          </font></Label>
-      <Rating layoutX="589.0" layoutY="392.0" rating="0.0" />
+      <Rating fx:id="selectedMovieRating" layoutX="588.0" layoutY="376.0" partialRating="true" rating="0.0" />
       <Label layoutX="284.0" layoutY="103.0" text="Sort by:" />
 
       <ChoiceBox fx:id="sort" layoutX="328.0" layoutY="98.0" prefHeight="26.0" prefWidth="120.0" style="-fx-background-color: #FF000040; -fx-background-radius: 10;" />
@@ -88,5 +87,7 @@
             <Image url="@icons8-trash-can-layout-for-a-indication-to-throw-trash-24.png" />
          </image>
       </ImageView>
+      <Label fx:id="selectedMovie" layoutX="631.0" layoutY="269.0" prefHeight="17.0" prefWidth="91.0" text="Selected movie" />
+      <Button fx:id="changeRating" layoutX="630.0" layoutY="427.0" mnemonicParsing="false" onAction="#changeRatingButton" style="-fx-background-color: #FF000040; -fx-background-radius: 10;" text="Change rating" />
    </children>
 </AnchorPane>
