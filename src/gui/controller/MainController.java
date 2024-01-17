@@ -6,7 +6,6 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,14 +22,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.Collator;
 import java.time.LocalDate;
-
-import java.util.Comparator;
-
 import java.time.format.DateTimeFormatter;
-
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-
 
 
 public class MainController implements Initializable {
@@ -53,16 +48,16 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     private Category selectedCategory;
 
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        sort.getItems().addAll(sorting);
         model = Model.getInstance();
 
-        ObservableList<Movie> data;
-
-        //ObservableList<Movie> data;
-
+        initializeTableviewColumns();
+        initializeCategorySelection();
+        setupSortChangeListener();
+        loadCategoriesToListView();
+    }
+    private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
         try {
 
@@ -70,42 +65,30 @@ public class MainController implements Initializable {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
-        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                selectedCategory = newSelection;
-                updateTable();
-            }
-        });
-
-
-        // Initialize TableView columns
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-
-        updateLastViewColumn();
-
-
-        // Update the playlistSongsView based on the selected playlist
-        categoryListview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            updateMoviesInCat(newValue);
-        });
+    }
+    private void setupSortChangeListener() {
+        sort.getItems().addAll(sorting);
 
         sort.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 handleSort(newValue);
             }
         });
-
     }
+    public void initializeCategorySelection(){
+        categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection != null) {
+                selectedCategory = newSelection;
+                updateTable();
+            }
+        });
+    }
+    public void initializeTableviewColumns(){
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
 
-    private void updateMoviesInCat(Category selectedCategory) {
-        if (selectedCategory != null) {
-            List<Movie> moviesInCategory = selectedCategory.getAllMovies();
-            // Update TableView with movies in the selected category
-            updateTableView(moviesInCategory);
-        }
+        updateLastViewColumn();
     }
 
     private void updateTableView(List<Movie> movies) {
@@ -113,8 +96,6 @@ public class MainController implements Initializable {
         movieTable.setItems(observableMovies);
 
     }
-
-
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -129,11 +110,6 @@ public class MainController implements Initializable {
     public void deleteMovieButton(ActionEvent actionEvent) {
     }
 
-
-    public void deleteMovieCategoryButton(ActionEvent actionEvent) {
-    }
-
-
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
         alert.setTitle("Attention");
@@ -144,15 +120,10 @@ public class MainController implements Initializable {
         alert.showAndWait();
 
     }
-
-
-
-
     public void updateTable() {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        //lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastView"));
         if (selectedCategory != null) {
             for (Movie movie : selectedCategory.getAllMovies()) {
                 data.add(movie);
@@ -177,11 +148,6 @@ public class MainController implements Initializable {
             }
         });
     }
-
-
-
-
-
     public void filterButton(ActionEvent actionEvent) throws SQLServerException {
         String filterText = filterTextfield.getText().toLowerCase().trim();
         ObservableList<Movie> filteredMovies = FXCollections.observableArrayList();
@@ -208,9 +174,6 @@ public class MainController implements Initializable {
         // Update the TableView with the filtered movies
         updateTableView(filteredMovies);
     }
-
-
-
     public void playButton(ActionEvent actionEvent) {
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
         if (selectedMovie != null) {
@@ -218,7 +181,6 @@ public class MainController implements Initializable {
             playMovie(filepath);
         }
     }
-
     private void playMovie(String filePath) {
         try {
             Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
@@ -233,7 +195,6 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
-
     public void deleteCategory(ActionEvent actionEvent) { //this method might need additional work
         Category selectedCategory = categoryListview.getSelectionModel().getSelectedItem();
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
@@ -246,7 +207,6 @@ public class MainController implements Initializable {
             sortMoviesByTitle(movieTable.getItems());
         }
     }
-
     private void handleSort (String selectedSort, ObservableList<Movie> Sorting){
 
         if (selectedSort.equals("Rating")) {
@@ -261,7 +221,6 @@ public class MainController implements Initializable {
         movieTable.setItems(ratingSorting);
 
     }
-
     public void sortMoviesByTitle (ObservableList<Movie> titleSorting) {
         Collator collator = Collator.getInstance();
         titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
