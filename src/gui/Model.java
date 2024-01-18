@@ -131,8 +131,8 @@ public class Model {
     }
 
 
-    public void deleteMovie(int movieId)throws SQLException{
-       movieManager.deleteMovie(movieId);
+    public void deleteMovie(int movieId,int categoryId)throws SQLException{
+       movieManager.deleteMovie(movieId,categoryId);
     }
     public void updateView(Movie movie, LocalDate date) throws SQLServerException {
         movieManager.updateView(movie, date);

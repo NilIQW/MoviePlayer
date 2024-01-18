@@ -50,8 +50,8 @@ public class MovieManager {
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);
     }
-    public void deleteMovie(int movieId)throws SQLServerException{
-        movieDao.deleteMovie(movieId);
+    public void deleteMovie(int movieId ,int categoryId)throws SQLServerException{
+        movieDao.deleteMovie(movieId,categoryId);
     }
     public void updateView(Movie movie, LocalDate date) throws SQLServerException {
         movieDao.updateMovieLastViewDate(movie, date);

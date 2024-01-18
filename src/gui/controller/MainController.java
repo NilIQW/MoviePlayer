@@ -131,7 +131,7 @@ public class MainController implements Initializable {
 
 //    public void refreshMovieTableView() throws SQLServerException {
 //        Category category = categoryListview.getSelectionModel().getSelectedItem();
-//        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
+//        List<Movie> list = movieM.getAllMoviesInCategory(category);
 //        updateTableView(list);
 //    }
 
@@ -150,24 +150,68 @@ public class MainController implements Initializable {
         stage.setScene(new Scene(root));
         stage.show();
     }
+   /* public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+        Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
 
-    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+        if (selectedMovie != null && selectedCategory != null) {
+            int movieId = selectedMovie.getId();
+            int categoryId = selectedCategory.getId();
 
-            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
-            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
-            if (selectedMovie != null) {
-                int Id = selectedMovie.getId();
-                System.out.println("Selected Movie ID: " + Id);
-
-                model.deleteMovie(Id);
-//                movieTable.getItems().remove(selectIndex);
-//                refreshMovieTableView();
-  //              updateTable();
-                // Additional actions if needed, such as updating the table
-                movieTable.getItems().clear();
-
-    }
+            model.deleteMovie(movieId, categoryId);
+             updateTable();
+            // Additional actions if needed, such as updating the table
+           // movieTable.getItems().clear();
         }
+    }*/
+//    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+//
+//            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+//            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
+//            if (selectedMovie != null) {
+//                int Id =
+//                int Id = selectedMovie.getId();
+//                System.out.println("Selected Movie ID: " + Id);
+//
+//                model.deleteMovie(Id);
+////                movieTable.getItems().remove(selectIndex);
+////                refreshMovieTableView();
+//  //              updateTable();
+//                // Additional actions if needed, such as updating the table
+//                movieTable.getItems().clear();
+//
+//    }
+//        }
+   public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+       Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+
+       // Переконайтеся, що selectedCategory також було ініціалізовано
+       if (selectedMovie != null && selectedCategory != null) {
+           int movieId = selectedMovie.getId();
+           int categoryId = selectedCategory.getId();
+
+           // Переконайтеся, що метод deleteMovie існує в класі model і правильно обробляє видалення
+           model.deleteMovie(movieId, categoryId);
+
+           // Оновіть таблицю після видалення
+           updateTable();
+
+           // Якщо updateTable не оновлює дані в таблиці, можна розглянути чистку та повторне завантаження даних
+             movieTable.getItems().clear();
+           // loadMoviesToTable(); // Припускаючи, що у вас є метод для завантаження фільмів у таблицю
+       }
+   }
+
+//    private void removeMovieFromCategory(Movie movie) {
+//        // Assuming you have a method to get the category of the movie
+//        Category movieCategory = getCategoryMovie(movie);
+//
+//        if (movieCategory != null) {
+//            movieCategory.removeMovie(movie);
+//
+//            // You may also want to update the database here if necessary
+//            // e.g., categoryDAO.updateCategory(movieCategory);
+//        }
+//    }
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
@@ -179,6 +223,7 @@ public class MainController implements Initializable {
         alert.showAndWait();
 
     }
+
     public void updateTable() throws SQLException {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
@@ -261,6 +306,7 @@ public class MainController implements Initializable {
         Category selectedCategory = categoryListview.getSelectionModel().getSelectedItem();
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
+
     }
     private void handleSort (String selectedSort){
         if (selectedSort.equals("Rating")) {
