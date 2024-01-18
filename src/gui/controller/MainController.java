@@ -66,6 +66,8 @@ public class MainController implements Initializable {
         initializeSelectedMovie();
         updateLastViewColumn();
 
+
+
         initializeSelectedMovie();
 
     }
