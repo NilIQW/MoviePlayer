@@ -64,13 +64,36 @@ public  class MovieDAO implements IMovieDAO{
         }
     }
 
+    @Override
+    public List<Movie> getAllMovies() throws SQLException {
+        List<Movie> movies = new ArrayList<>();
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "SELECT * FROM Movie";
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
 
-    /**
-     * Retrieves a list of movies in a specific category from the database.
-     *
-     * @param category The Category for which movies are to be retrieved.
-     * @return A List of Movie objects in the specified category.
-     */
+                String title = rs.getString("name");
+                Double rating = rs.getDouble("rating");
+                String path = rs.getString("filelink");
+                // Retrieve the Date from the ResultSet
+                Date sqlDate = rs.getDate("lastview");
+
+                // Convert java.sql.Date to java.time.LocalDate
+                LocalDate lastView = sqlDate.toLocalDate();
+
+
+                Movie m = new Movie(title, rating, path, lastView);
+                movies.add(m);
+
+            }
+            return movies;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     @Override
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         ArrayList<Movie> MoviesInCategory = new ArrayList<>();
@@ -137,7 +160,6 @@ public  class MovieDAO implements IMovieDAO{
                 ResultSet rs = selectPt.executeQuery();
 
                 if (rs.next()) {
-                    // Extract the updated rating from the result set
                     Double updatedRating = rs.getDouble("rating");
                     // Update the rating in the Movie object
                     m.setRating(updatedRating);
@@ -148,7 +170,53 @@ public  class MovieDAO implements IMovieDAO{
         }
 
     }
+//    @Override
+//    public void deleteMovie(int movieId) {
+//        System.out.println(movieId);
+//        /*deleteFromCatMovie(movieId);*/
+//        try (Connection con = connectionManager.getConnection()) {
+//            String sql = "DELETE FROM MovieCategory WHERE MovieId = ?";
+//            String sql1 = "DELETE FROM Movie WHERE id = ?";
+//            PreparedStatement statement = con.prepareStatement(sql);
+//            PreparedStatement statement1 = con.prepareStatement(sql1);
+//
+//            statement.setInt(1, movieId);
+//            statement.executeUpdate();
+//            statement1.setInt(1, movieId);
+//            statement1.executeUpdate();
+//
+//
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
+    public void deleteMovie(int movieId, int categoryId) {
+        System.out.println(movieId);
+        try (Connection con = connectionManager.getConnection()) {
+            // Delete the movie from the specific category
+            String sql = "DELETE FROM MovieCategory WHERE MovieId = ? AND CategoryId = ?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1, movieId);
+            statement.setInt(2, categoryId);
+            statement.executeUpdate();
 
+            // Check if the movie is associated with any other categories
+            String checkSql = "SELECT COUNT(*) FROM MovieCategory WHERE MovieId = ?";
+            PreparedStatement checkStatement = con.prepareStatement(checkSql);
+            checkStatement.setInt(1, movieId);
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            // If the movie is not associated with any other categories, delete from the Movie table
+            if (resultSet.next() && resultSet.getInt(1) == 0) {
+                String deleteMovieSql = "DELETE FROM Movie WHERE id = ?";
+                PreparedStatement deleteMovieStatement = con.prepareStatement(deleteMovieSql);
+                deleteMovieStatement.setInt(1, movieId);
+                deleteMovieStatement.executeUpdate();
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
-

@@ -45,7 +45,16 @@ public class Category {
         this.name = name;
     }
 
+    public void removeMovie(Movie movie) {
+        // Assuming you have a list of movies in your Category class
+        List<Movie> movies = getAllMovies();
 
+        // Remove the specified movie from the list
+        movies.remove(movie);
+
+        // You may also want to update the database here if necessary
+        // e.g., categoryDAO.updateCategory(this);
+    }
 
     @Override
     public String toString() {
