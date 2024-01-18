@@ -55,8 +55,8 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     @FXML
     private Category selectedCategory;
-    private MovieDAO movieDAO;
-    private MovieManager movieManager;
+//    private MovieDAO movieDAO;
+//    private MovieManager movieManager;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
@@ -67,18 +67,18 @@ public class MainController implements Initializable {
         loadCategoriesToListView();
         initializeSelectedMovie();
 
-        try {
-            this.movieDAO = new MovieDAO() {
-
-//                public void updateMovieLastViewDate(Movie movie, String date) {
+//        try {
+//            this.movieDAO = new MovieDAO() {
 //
-//                }
-            };
-        } catch (SQLException e) {
-            e.printStackTrace();
+////                public void updateMovieLastViewDate(Movie movie, String date) {
+////
+////                }
+//            };
+//        } catch (SQLException e) {
+//            e.printStackTrace();
             // Handle MovieDAO initialization error
         }
-    }
+
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
         try {
@@ -129,11 +129,11 @@ public class MainController implements Initializable {
 
     }
 
-    public void refreshMovieTableView() throws SQLServerException {
-        Category category = categoryListview.getSelectionModel().getSelectedItem();
-        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
-        updateTableView(list);
-    }
+//    public void refreshMovieTableView() throws SQLServerException {
+//        Category category = categoryListview.getSelectionModel().getSelectedItem();
+//        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
+//        updateTableView(list);
+//    }
 
     private void updateTableView(List<Movie> movies) {
         movieTable.getItems().clear();
@@ -162,8 +162,9 @@ public class MainController implements Initializable {
                 model.deleteMovie(Id);
 //                movieTable.getItems().remove(selectIndex);
 //                refreshMovieTableView();
-                updateTable();
+  //              updateTable();
                 // Additional actions if needed, such as updating the table
+                movieTable.getItems().clear();
 
     }
         }
@@ -183,7 +184,7 @@ public class MainController implements Initializable {
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         if (selectedCategory != null) {
-            for (Movie movie : movieDAO.getAllMoviesInCategory(selectedCategory)) {
+            for (Movie movie : selectedCategory.getAllMovies())/*CatemovieDAO.getAllMoviesInCategory(selectedCategory))*/ {
                 data.add(movie);
             }
             movieTable.setItems(data);
@@ -245,7 +246,8 @@ public class MainController implements Initializable {
         if (selectedMovie != null) {
             try {
                 selectedMovie.setLastViewDate(LocalDate.now());
-                movieDAO.updateMovieLastViewDate(selectedMovie, LocalDate.now());
+                model.updateView(selectedMovie, LocalDate.now());
+                /*movieDAO.updateMovieLastViewDate(selectedMovie, LocalDate.now());*/
                 java.awt.Desktop.getDesktop().open(new File(filePath));
                 movieTable.refresh();
             } catch (IOException e) {

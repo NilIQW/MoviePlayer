@@ -8,6 +8,7 @@ import dal.IMovieDAO;
 import Exceptions.MovieException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -52,6 +53,10 @@ public class MovieManager {
     public void deleteMovie(int movieId)throws SQLServerException{
         movieDao.deleteMovie(movieId);
     }
+    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
+        movieDao.updateMovieLastViewDate(movie, date);
+    }
+
 }
 
 

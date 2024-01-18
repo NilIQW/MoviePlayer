@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -132,6 +133,9 @@ public class Model {
 
     public void deleteMovie(int movieId)throws SQLException{
        movieManager.deleteMovie(movieId);
+    }
+    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
+        movieManager.updateView(movie, date);
     }
 
 
