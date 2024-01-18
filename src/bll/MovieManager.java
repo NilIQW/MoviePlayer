@@ -29,6 +29,8 @@ public class MovieManager {
     }
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieDao.updateMovieRating(movie);
+
+
     }
     private boolean isMovieValid (Movie movie){
         return movie != null && !movie.getTitle().isEmpty() && movie.getRating() >= 0 && !movie.getPath().isEmpty();
@@ -38,9 +40,6 @@ public class MovieManager {
         movieDao.addMovieToCategory(category, movie);
     }
 
-    public List<Movie> getAllMovies() throws SQLException {
-        return movieDao.getAllMovies();
-    }
 
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);

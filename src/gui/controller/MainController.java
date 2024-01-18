@@ -1,5 +1,6 @@
 package gui.controller;
 
+import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
@@ -99,20 +100,6 @@ public class MainController implements Initializable {
 
     }
 
-
-   /*public void initializeTableviewColumns(){
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
-
-        updateLastViewColumn();
-    }
-
-    private void updateTableView(List<Movie> movies) {
-        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
-        movieTable.setItems(observableMovies);
-
-    }*/
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -188,8 +175,6 @@ public class MainController implements Initializable {
         }
         if(sort.getValue()!= null){
         handleSort(sort.getValue(),filteredMovies);}
-        // Update the TableView with the filtered movies
-       // updateTableView(filteredMovies);
         movieTable.setItems(filteredMovies);
     }
     public void playButton(ActionEvent actionEvent) {
@@ -218,6 +203,11 @@ public class MainController implements Initializable {
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
     }
+    /**
+     * Handles sorting of movies based on the selected sort criteria for the default list associated with movieTable.
+     *
+     * @param selectedSort The selected sort criteria ("Rating" or "Title").
+     */
     private void handleSort (String selectedSort){
         if (selectedSort.equals("Rating")) {
             sortMoviesByRating(movieTable.getItems());
@@ -225,6 +215,12 @@ public class MainController implements Initializable {
             sortMoviesByTitle(movieTable.getItems());
         }
     }
+    /**
+     * Handles sorting of movies based on the selected sort criteria for a specified ObservableList.
+     *
+     * @param selectedSort The selected sort criteria ("Rating" or "Title").
+     * @param sorting The ObservableList of movies to be sorted.
+     */
     private void handleSort (String selectedSort, ObservableList<Movie> Sorting){
 
         if (selectedSort.equals("Rating")) {
@@ -240,6 +236,7 @@ public class MainController implements Initializable {
 
     }
     public void sortMoviesByTitle (ObservableList<Movie> titleSorting) {
+        // Use Comparator.comparing with Collator to compare movies based on their titles in a case-insensitive manner
         Collator collator = Collator.getInstance();
         titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
         movieTable.setItems(titleSorting);
@@ -254,22 +251,28 @@ public class MainController implements Initializable {
 
 
     public void changeRatingButton(ActionEvent actionEvent) throws SQLServerException {
-        Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
 
-        if (selectedM != null) {
-            System.out.println(selectedM.getId());
-            System.out.println(selectedM.getRating());
+            Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
 
-            double newRating = selectedMovieRating.getRating();
-            selectedM.setRating(newRating);
-            model.updateMovieRating(selectedM);
-            movieTable.refresh();
+            if (selectedM != null) {
+                double newRating = selectedMovieRating.getRating();
+                selectedM.setRating(newRating);
+                model.updateMovieRating(selectedM);
+                movieTable.refresh();
+                resetSelectedMovieInformation();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Movie updated");
+                alert.showAndWait();
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Select movie");
+                alert.showAndWait();
+            }
 
-        }
 
     }
-    public void test(){
-
+    private void resetSelectedMovieInformation() {
+        selectedMovie.setText("");
+        selectedMovieRating.setRating(0); // Assuming Rating control supports setting to 0
     }
 
 }

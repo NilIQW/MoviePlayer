@@ -116,7 +116,7 @@ public class MovieController implements Initializable {
 
 
 
-        public void saveMovieButton(ActionEvent actionEvent){
+        public void saveMovieButton(ActionEvent actionEvent) {
             // Retrieve input values
 
             String path = filePath.getText();
