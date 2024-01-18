@@ -17,7 +17,8 @@ public class CategoryManager {
     public void deleteCategory(int id){
         categoryDAO.deleteCategory(id);
     }
-
+    public  void updateCategory(Category category){
+    }
     public List<Category> getAllCategories() {
         return categoryDAO.getAllCategories();
     }
