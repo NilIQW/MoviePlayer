@@ -8,6 +8,7 @@ import dal.IMovieDAO;
 import Exceptions.MovieException;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -47,11 +48,13 @@ public class MovieManager {
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of f2ab3a1 (.)
-
+    public void deleteMovie(int movieId)throws SQLServerException{
+        movieDao.deleteMovie(movieId);
+    }
+    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
+        movieDao.updateMovieLastViewDate(movie, date);
+    }
 }
 
 

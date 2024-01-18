@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,10 +60,7 @@ public class Model {
         movieManager.createMovie(newMovie);
 
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> parent of f2ab3a1 (.)
     public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
         if (!categoryExists(newCategory)) {
@@ -129,20 +127,13 @@ public class Model {
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);
     }
-
-
-<<<<<<< HEAD
-=======
-
-
-
-
->>>>>>> parent of f2ab3a1 (.)
+    public void deleteMovie(int movieId)throws SQLException{
+        movieManager.deleteMovie(movieId);
+    }
+    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
+        movieManager.updateView(movie, date);
+    }
 }
 
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> parent of f2ab3a1 (.)

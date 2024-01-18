@@ -148,23 +148,40 @@ public class MainController implements Initializable {
     }
 
 
-    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+    public void deleteMovieButton(ActionEvent actionEvent) {
+        // Get the selected movie
+        Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
 
-            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
-            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
-            if (selectedMovie != null) {
-                int Id = selectedMovie.getId();
-                System.out.println("Selected Movie ID: " + Id);
+        if (selectedMovie != null) {
+            // Display a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Delete Movie");
+            alert.setContentText("Are you sure you want to delete the selected movie: " + selectedMovie.getTitle() + "?");
 
-                model.deleteMovie(Id);
-//                movieTable.getItems().remove(selectIndex);
-//                refreshMovieTableView();
-  //              updateTable();
-                // Additional actions if needed, such as updating the table
-                movieTable.getItems().clear();
-
-    }
+            // If the user confirms, delete the movie
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    try {
+                        // Delete the movie from the model and update the UI
+                        model.deleteMovie(selectedMovie.getId());
+                        selectedCategory.removeMovie(selectedMovie);
+                        updateTable();
+                    } catch (SQLException e) {
+                        // Handle the exception appropriately (e.g., show an error message)
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            // If no movie is selected, display an information dialog
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Movie Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a movie to delete.");
+            alert.showAndWait();
         }
+    }
 
 
 

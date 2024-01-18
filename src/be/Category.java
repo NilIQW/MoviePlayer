@@ -51,4 +51,14 @@ public class Category {
     public String toString() {
         return name;
     }
+
+    public void removeMovie(Movie movie) {
+        // Assuming you have a list of movies in your Category class
+        List<Movie> movies = getAllMovies();
+
+        // Remove the specified movie from the list
+        movies.remove(movie);
+
+
+    }
 }

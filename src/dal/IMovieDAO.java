@@ -14,11 +14,7 @@ public interface IMovieDAO {
     List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException;
     public void updateMovieRating(Movie m)throws SQLServerException;
     public void updateMovieLastViewDate(Movie movie, LocalDate date)throws SQLServerException;
+    public void deleteMovie(int movieId) throws SQLServerException;
 
-<<<<<<< HEAD
-//    public void deleteMovie(int movieId);
-    public void deleteMovie(int movieId, int categoryId) throws SQLServerException;
 
-=======
->>>>>>> parent of f2ab3a1 (.)
 }
