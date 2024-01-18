@@ -1,8 +1,8 @@
 package gui.controller;
 
+import Exceptions.MovieException;
 import be.Category;
 import be.Movie;
-import bll.MovieManager;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.MovieDAO;
 import gui.Model;
@@ -55,6 +55,8 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     @FXML
     private Category selectedCategory;
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
@@ -63,10 +65,13 @@ public class MainController implements Initializable {
         setupSortChangeListener();
         loadCategoriesToListView();
         initializeSelectedMovie();
+        updateLastViewColumn();
 
-        }
 
-    private void loadCategoriesToListView(){
+    }
+
+
+    private void loadCategoriesToListView() {
         categoryListview.setItems(model.getCategoryList());
         try {
 
@@ -75,6 +80,7 @@ public class MainController implements Initializable {
             throw new RuntimeException(e);
         }
     }
+
     private void setupSortChangeListener() {
         sort.getItems().addAll(sorting);
 
@@ -84,20 +90,17 @@ public class MainController implements Initializable {
             }
         });
     }
-    public void initializeCategorySelection(){
+
+    public void initializeCategorySelection() {
         categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedCategory = newSelection;
-
-                try {
-                    updateTable();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                updateTable();
             }
         });
     }
-    public void initializeSelectedMovie(){
+
+    public void initializeSelectedMovie() {
         movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 editMovieRating();
@@ -105,6 +108,8 @@ public class MainController implements Initializable {
         });
 
     }
+
+
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -116,19 +121,45 @@ public class MainController implements Initializable {
         stage.show();
     }
 
-    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
 
-            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
-            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
-            if (selectedMovie != null) {
-                int Id = selectedMovie.getId();
-                System.out.println("Selected Movie ID: " + Id);
 
-                model.deleteMovie(Id);
-                movieTable.getItems().clear();
+    public void deleteMovieButton(ActionEvent actionEvent) {
+        // Get the selected movie
+        Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
 
-    }
+        if (selectedMovie != null && selectedCategory != null) {
+            // Display a confirmation dialog
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirm Deletion");
+            alert.setHeaderText("Delete Movie");
+            alert.setContentText("Are you sure you want to delete the selected movie: " + selectedMovie.getTitle() + "?");
+
+            // If the user confirms, delete the movie
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    try {
+                        // Delete the movie from the model and update the UI
+                        model.deleteMovieFromCategory(selectedMovie.getId(), selectedCategory.getId());
+                        selectedCategory.removeMovie(selectedMovie);
+                        updateTable();
+                    } catch (SQLException e) {
+                        // Handle the exception appropriately (e.g., show an error message)
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } else {
+            // If no movie is selected, display an information dialog
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No Movie Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a movie to delete.");
+            alert.showAndWait();
         }
+    }
+
+
+
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
@@ -140,12 +171,12 @@ public class MainController implements Initializable {
         alert.showAndWait();
 
     }
-    public void updateTable() throws SQLException {
+    public void updateTable() {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         if (selectedCategory != null) {
-            for (Movie movie : selectedCategory.getAllMovies())/*CatemovieDAO.getAllMoviesInCategory(selectedCategory))*/ {
+            for (Movie movie : selectedCategory.getAllMovies()) {
                 data.add(movie);
             }
             movieTable.setItems(data);
@@ -191,8 +222,6 @@ public class MainController implements Initializable {
         }
         if(sort.getValue()!= null){
         handleSort(sort.getValue(),filteredMovies);}
-        // Update the TableView with the filtered movies
-       // updateTableView(filteredMovies);
         movieTable.setItems(filteredMovies);
     }
     public void playButton(ActionEvent actionEvent) {
@@ -207,8 +236,7 @@ public class MainController implements Initializable {
         if (selectedMovie != null) {
             try {
                 selectedMovie.setLastViewDate(LocalDate.now());
-                model.updateView(selectedMovie, LocalDate.now());
-                /*movieDAO.updateMovieLastViewDate(selectedMovie, LocalDate.now());*/
+                model.updateLastView(selectedMovie, LocalDate.now());
                 java.awt.Desktop.getDesktop().open(new File(filePath));
                 movieTable.refresh();
             } catch (IOException e) {
@@ -218,11 +246,16 @@ public class MainController implements Initializable {
             }
         }
     }
-    public void deleteCategory(ActionEvent actionEvent) { //this method might need additional work
+    public void deleteCategory(ActionEvent actionEvent) throws SQLException { //this method might need additional work
         Category selectedCategory = categoryListview.getSelectionModel().getSelectedItem();
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
     }
+    /**
+     * Handles sorting of movies based on the selected sort criteria for the default list associated with movieTable.
+     *
+     * @param selectedSort The selected sort criteria ("Rating" or "Title").
+     */
     private void handleSort (String selectedSort){
         if (selectedSort.equals("Rating")) {
             sortMoviesByRating(movieTable.getItems());
@@ -230,6 +263,12 @@ public class MainController implements Initializable {
             sortMoviesByTitle(movieTable.getItems());
         }
     }
+    /**
+     * Handles sorting of movies based on the selected sort criteria for a specified ObservableList.
+     *
+     * @param selectedSort The selected sort criteria ("Rating" or "Title").
+     * @param sorting The ObservableList of movies to be sorted.
+     */
     private void handleSort (String selectedSort, ObservableList<Movie> Sorting){
 
         if (selectedSort.equals("Rating")) {
@@ -245,6 +284,7 @@ public class MainController implements Initializable {
 
     }
     public void sortMoviesByTitle (ObservableList<Movie> titleSorting) {
+        // Use Comparator.comparing with Collator to compare movies based on their titles in a case-insensitive manner
         Collator collator = Collator.getInstance();
         titleSorting.sort(Comparator.comparing(Movie::getTitle, collator));
         movieTable.setItems(titleSorting);
@@ -259,19 +299,29 @@ public class MainController implements Initializable {
 
 
     public void changeRatingButton(ActionEvent actionEvent) throws SQLServerException {
-        Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
 
-        if (selectedM != null) {
-            System.out.println(selectedM.getId());
-            System.out.println(selectedM.getRating());
+            Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
 
-            double newRating = selectedMovieRating.getRating();
-            selectedM.setRating(newRating);
-            model.updateMovieRating(selectedM);
-            movieTable.refresh();
+            if (selectedM != null) {
+                double newRating = selectedMovieRating.getRating();
+                selectedM.setRating(newRating);
+                model.updateMovieRating(selectedM);
+                movieTable.refresh();
+                resetSelectedMovieInformation();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Movie updated");
+                alert.showAndWait();
+            }
+            else {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Select movie");
+                alert.showAndWait();
+            }
 
-        }
 
+    }
+
+    private void resetSelectedMovieInformation() {
+        selectedMovie.setText("");
+        selectedMovieRating.setRating(0); // Assuming Rating control supports setting to 0
     }
 
 

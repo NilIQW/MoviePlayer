@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class MovieDAO implements IMovieDAO{
+public  class MovieDAO implements IMovieDAO {
     private final ConnectionManager connectionManager;
 
     public MovieDAO() throws SQLException {
@@ -64,36 +64,13 @@ public  class MovieDAO implements IMovieDAO{
         }
     }
 
-    @Override
-    public List<Movie> getAllMovies() throws SQLException {
-        List<Movie> movies = new ArrayList<>();
-        try (Connection con = connectionManager.getConnection()) {
-            String sql = "SELECT * FROM Movie";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
 
-                String title = rs.getString("name");
-                Double rating = rs.getDouble("rating");
-                String path = rs.getString("filelink");
-                // Retrieve the Date from the ResultSet
-                Date sqlDate = rs.getDate("lastview");
-
-                // Convert java.sql.Date to java.time.LocalDate
-                LocalDate lastView = sqlDate.toLocalDate();
-
-
-                Movie m = new Movie(title, rating, path, lastView);
-                movies.add(m);
-
-            }
-            return movies;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
+    /**
+     * Retrieves a list of movies in a specific category from the database.
+     *
+     * @param category The Category for which movies are to be retrieved.
+     * @return A List of Movie objects in the specified category.
+     */
     @Override
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         ArrayList<Movie> MoviesInCategory = new ArrayList<>();
@@ -130,6 +107,7 @@ public  class MovieDAO implements IMovieDAO{
 
         return MoviesInCategory;
     }
+
     @Override
     public void updateMovieLastViewDate(Movie movie, LocalDate date) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
@@ -143,8 +121,9 @@ public  class MovieDAO implements IMovieDAO{
             throw new RuntimeException("An error occurred when updating the last time you watched a movie: " + e.getMessage(), e);
         }
     }
+
     @Override
-    public void updateMovieRating(Movie m)throws SQLServerException {
+    public void updateMovieRating(Movie m) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
             String sql = "UPDATE Movie SET rating = ? WHERE id = ?";
             try (PreparedStatement pt = con.prepareStatement(sql)) {
@@ -160,6 +139,7 @@ public  class MovieDAO implements IMovieDAO{
                 ResultSet rs = selectPt.executeQuery();
 
                 if (rs.next()) {
+                    // Extract the updated rating from the result set
                     Double updatedRating = rs.getDouble("rating");
                     // Update the rating in the Movie object
                     m.setRating(updatedRating);
@@ -171,7 +151,8 @@ public  class MovieDAO implements IMovieDAO{
 
     }
 
-    public void deleteMovie(int movieId, int categoryId) {
+
+    public void deleteMovie(int movieId, int categoryId) throws SQLServerException {
         System.out.println(movieId);
         try (Connection con = connectionManager.getConnection()) {
             // Delete the movie from the specific category
@@ -180,6 +161,7 @@ public  class MovieDAO implements IMovieDAO{
             statement.setInt(1, movieId);
             statement.setInt(2, categoryId);
             statement.executeUpdate();
+
 
             // Check if the movie is associated with any other categories
             String checkSql = "SELECT COUNT(*) FROM MovieCategory WHERE MovieId = ?";
@@ -195,8 +177,8 @@ public  class MovieDAO implements IMovieDAO{
                 deleteMovieStatement.executeUpdate();
             }
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

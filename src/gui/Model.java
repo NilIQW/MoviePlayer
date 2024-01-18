@@ -30,40 +30,40 @@ public class Model {
         }
     }
 
-    private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private static ObservableList<Category> categoryList;
 
     static {
         initializeCategories();
     }
+
     private Model() throws SQLException {
         categoryList = DefaultCategories.defaultCategory();
         movieManager = new MovieManager();
         categoryManager = new CategoryManager();
 
     }
+
     public CategoryManager getCategoryManager() {
         return categoryManager;
     }
-    public ObservableList<Category> getCategoryList(){
+
+    public ObservableList<Category> getCategoryList() {
         return categoryList;
     }
-    public ObservableList<Movie> getMovieList(){
-        return movieList;
-    }
+
 
     public static Model getInstance() {
         return instance;
     }
 
     public void createMovie(Movie newMovie) throws MovieException {
-        movieList.add(newMovie);
         movieManager.createMovie(newMovie);
 
     }
-    public void createCategory(String name){
+
+    public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
-        if(!categoryExists(newCategory)) {
+        if (!categoryExists(newCategory)) {
             categoryList.add(newCategory);
             categoryManager.addCategory(newCategory);
         } else {
@@ -76,6 +76,7 @@ public class Model {
             alert.showAndWait();
         }
     }
+
     public boolean categoryExists(Category category) {
         List<Category> existingCategories = categoryList;
 
@@ -86,11 +87,14 @@ public class Model {
         }
         return false;
     }
+
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieManager.addMovieToCategory(category, movie);
     }
+
     /**
      * Retrieves a Category from the categoryList based on its name.
+     *
      * @param categoryName The name of the Category to be retrieved.
      * @return The Category with the specified name.
      */
@@ -101,7 +105,6 @@ public class Model {
             }
         }
         return null;
-
     }
 
 
@@ -110,7 +113,7 @@ public class Model {
         categoryList = FXCollections.observableArrayList(defaultCategories);
     }
 
-    public void loadCategories() throws SQLServerException {
+    public void loadCategories() throws SQLException {
         categoryList.clear();
         categoryList.addAll(categoryManager.getAllCategories());
         //loops through categories and associates them with category, after sets all movies to AllMovies list
@@ -120,27 +123,20 @@ public class Model {
         }
     }
 
-    public static void loadMovies() throws SQLException {
-        movieList.clear();
-        movieList.addAll(movieManager.getAllMovies());
-    }
 
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);
     }
-
-
-    public void deleteMovie(int movieId,int categoryId)throws SQLException{
-       movieManager.deleteMovie(movieId,categoryId);
+    public void deleteMovieFromCategory(int movieId, int categoryId) throws SQLServerException {
+        movieManager.deleteMovieFromCategory( movieId, categoryId);
     }
-    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
-        movieManager.updateView(movie, date);
+
+    public void updateLastView(Movie movie, LocalDate date) throws SQLServerException {
+        movieManager.updateMovieView(movie, date);
     }
 
 
 }
-
-
 
 
 

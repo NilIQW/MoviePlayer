@@ -24,10 +24,9 @@ public class Category {
     public List<Movie> getAllMovies(){
         return allMovies;
     }
-    public void addMovie (Movie movie){
-        allMovies.add(movie);
+    public void removeMovie(Movie movie) {
+        this.allMovies.remove(movie);
     }
-
 
     public int getId() {
         return id;
@@ -43,17 +42,6 @@ public class Category {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void removeMovie(Movie movie) {
-        // Assuming you have a list of movies in your Category class
-        List<Movie> movies = getAllMovies();
-
-        // Remove the specified movie from the list
-        movies.remove(movie);
-
-        // You may also want to update the database here if necessary
-        // e.g., categoryDAO.updateCategory(this);
     }
 
     @Override
