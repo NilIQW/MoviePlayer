@@ -55,28 +55,15 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     @FXML
     private Category selectedCategory;
-//    private MovieDAO movieDAO;
-//    private MovieManager movieManager;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
 
-        initializeTableviewColumns();
         initializeCategorySelection();
         setupSortChangeListener();
         loadCategoriesToListView();
         initializeSelectedMovie();
 
-//        try {
-//            this.movieDAO = new MovieDAO() {
-//
-////                public void updateMovieLastViewDate(Movie movie, String date) {
-////
-////                }
-//            };
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-            // Handle MovieDAO initialization error
         }
 
     private void loadCategoriesToListView(){
@@ -118,28 +105,6 @@ public class MainController implements Initializable {
         });
 
     }
-
-
-    public void initializeTableviewColumns(){
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
-
-        updateLastViewColumn();
-
-    }
-
-//    public void refreshMovieTableView() throws SQLServerException {
-//        Category category = categoryListview.getSelectionModel().getSelectedItem();
-//        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
-//        updateTableView(list);
-//    }
-
-    private void updateTableView(List<Movie> movies) {
-        movieTable.getItems().clear();
-        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
-        movieTable.setItems(observableMovies);
-    }
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -160,10 +125,6 @@ public class MainController implements Initializable {
                 System.out.println("Selected Movie ID: " + Id);
 
                 model.deleteMovie(Id);
-//                movieTable.getItems().remove(selectIndex);
-//                refreshMovieTableView();
-  //              updateTable();
-                // Additional actions if needed, such as updating the table
                 movieTable.getItems().clear();
 
     }
