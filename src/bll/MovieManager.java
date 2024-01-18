@@ -8,7 +8,6 @@ import dal.IMovieDAO;
 import Exceptions.MovieException;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -33,28 +32,20 @@ public class MovieManager {
     }
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieDao.updateMovieRating(movie);
+
+
     }
     private boolean isMovieValid (Movie movie){
         return movie != null && !movie.getTitle().isEmpty() && movie.getRating() >= 0 && !movie.getPath().isEmpty();
 
     }
-
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieDao.addMovieToCategory(category, movie);
     }
 
-    public List<Movie> getAllMovies() throws SQLException {
-        return movieDao.getAllMovies();
-    }
 
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);
-    }
-    public void deleteMovie(int movieId)throws SQLServerException{
-        movieDao.deleteMovie(movieId);
-    }
-    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
-        movieDao.updateMovieLastViewDate(movie, date);
     }
 
 }

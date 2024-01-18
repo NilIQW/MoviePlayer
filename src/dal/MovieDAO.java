@@ -64,36 +64,13 @@ public  class MovieDAO implements IMovieDAO{
         }
     }
 
-    @Override
-    public List<Movie> getAllMovies() throws SQLException {
-        List<Movie> movies = new ArrayList<>();
-        try (Connection con = connectionManager.getConnection()) {
-            String sql = "SELECT * FROM Movie";
-            Statement st = con.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
 
-                String title = rs.getString("name");
-                Double rating = rs.getDouble("rating");
-                String path = rs.getString("filelink");
-                // Retrieve the Date from the ResultSet
-                Date sqlDate = rs.getDate("lastview");
-
-                // Convert java.sql.Date to java.time.LocalDate
-                LocalDate lastView = sqlDate.toLocalDate();
-
-
-                Movie m = new Movie(title, rating, path, lastView);
-                movies.add(m);
-
-            }
-            return movies;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
+    /**
+     * Retrieves a list of movies in a specific category from the database.
+     *
+     * @param category The Category for which movies are to be retrieved.
+     * @return A List of Movie objects in the specified category.
+     */
     @Override
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         ArrayList<Movie> MoviesInCategory = new ArrayList<>();
@@ -160,6 +137,7 @@ public  class MovieDAO implements IMovieDAO{
                 ResultSet rs = selectPt.executeQuery();
 
                 if (rs.next()) {
+                    // Extract the updated rating from the result set
                     Double updatedRating = rs.getDouble("rating");
                     // Update the rating in the Movie object
                     m.setRating(updatedRating);
@@ -170,25 +148,7 @@ public  class MovieDAO implements IMovieDAO{
         }
 
     }
-    @Override
-    public void deleteMovie(int movieId) {
-        System.out.println(movieId);
-        /*deleteFromCatMovie(movieId);*/
-        try (Connection con = connectionManager.getConnection()) {
-            String sql = "DELETE FROM MovieCategory WHERE MovieId = ?";
-            String sql1 = "DELETE FROM Movie WHERE id = ?";
-            PreparedStatement statement = con.prepareStatement(sql);
-            PreparedStatement statement1 = con.prepareStatement(sql1);
-
-            statement.setInt(1, movieId);
-            statement.executeUpdate();
-            statement1.setInt(1, movieId);
-            statement1.executeUpdate();
 
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
 }
 

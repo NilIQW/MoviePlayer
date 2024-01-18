@@ -13,7 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,6 @@ public class Model {
         }
     }
 
-    private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private static ObservableList<Category> categoryList;
 
     static {
@@ -48,21 +46,18 @@ public class Model {
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
-    public static ObservableList<Movie> getMovieList() throws SQLException {
-        loadMovies();
-        return movieList;
-    }
+
+
 
     public static Model getInstance() {
         return instance;
     }
 
     public void createMovie(Movie newMovie) throws MovieException {
-        movieList.add(newMovie);
         movieManager.createMovie(newMovie);
 
     }
-    public void createCategory(String name){
+    public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
         if(!categoryExists(newCategory)) {
             categoryList.add(newCategory);
@@ -102,7 +97,6 @@ public class Model {
             }
         }
         return null;
-
     }
 
 
@@ -111,7 +105,7 @@ public class Model {
         categoryList = FXCollections.observableArrayList(defaultCategories);
     }
 
-    public void loadCategories() throws SQLServerException {
+    public void loadCategories() throws SQLException {
         categoryList.clear();
         categoryList.addAll(categoryManager.getAllCategories());
         //loops through categories and associates them with category, after sets all movies to AllMovies list
@@ -121,26 +115,17 @@ public class Model {
         }
     }
 
-    public static void loadMovies() throws SQLException {
-        movieList.clear();
-        movieList.addAll(movieManager.getAllMovies());
-    }
 
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);
     }
 
 
-    public void deleteMovie(int movieId)throws SQLException{
-       movieManager.deleteMovie(movieId);
-    }
-    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
-        movieManager.updateView(movie, date);
-    }
+
+
 
 
 }
-
 
 
 
