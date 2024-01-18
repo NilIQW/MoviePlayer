@@ -1,6 +1,7 @@
 package be;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Movie {
     private int id;
@@ -77,5 +78,19 @@ public class Movie {
     public void setLastViewDate(LocalDate lastViewDate) {
         this.lastViewDate = lastViewDate;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Movie otherMovie = (Movie) obj;
+        return id == otherMovie.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
 }
 
