@@ -48,7 +48,8 @@ public class Model {
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
-    public ObservableList<Movie> getMovieList(){
+    public static ObservableList<Movie> getMovieList() throws SQLException {
+        loadMovies();
         return movieList;
     }
 
