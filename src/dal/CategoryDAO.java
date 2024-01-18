@@ -15,7 +15,7 @@ public class CategoryDAO implements ICategoryDAO {
     public CategoryDAO(){
         this.connectionManager = new ConnectionManager();
     }
-    public void saveCategory(Category category) throws SQLException {
+    public void saveCategory(Category category) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement("INSERT INTO Category (name) VALUES (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
@@ -30,12 +30,14 @@ public class CategoryDAO implements ICategoryDAO {
                 }
             }
 
+
+
         } catch (SQLException e) {
-            throw new SQLException("Category wasn't saved, try again");
+            e.printStackTrace(); // Handle the exception appropriately
         }
     }
     @Override
-    public List<Category> getAllCategories() throws SQLException {
+    public List<Category> getAllCategories() {
         List<Category> categories = new ArrayList<>();
 
         try (Connection connection = connectionManager.getConnection();
@@ -53,17 +55,27 @@ public class CategoryDAO implements ICategoryDAO {
             }
 
         } catch (SQLException e) {
-            throw new SQLException("Couldn't get all categories from the SQL database", e);
+            e.printStackTrace();
         }
 
         return categories;
     }
 
+    @Override
+    public void updateCategory(Category category) {
+        try (Connection connection = connectionManager.getConnection();
+             PreparedStatement statement = connection.prepareStatement("UPDATE Category SET name = ? WHERE id = ?")) {
 
+            statement.setString(1, category.getName());
+            statement.setInt(2, category.getId());
+            statement.executeUpdate();
 
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately
+        }
+    }
 
-    public void deleteCategory(int categoryId) throws SQLException {
-
+    public void deleteCategory(int categoryId) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement("DELETE FROM Category WHERE id = ?")) {
 
@@ -71,7 +83,7 @@ public class CategoryDAO implements ICategoryDAO {
             statement.executeUpdate();
 
         } catch (SQLException e) {
-            throw new SQLException("Category wasn't deleted, try again", e);
+            e.printStackTrace(); // Handle the exception appropriately
         }
     }
 
