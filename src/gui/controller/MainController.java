@@ -67,7 +67,6 @@ public class MainController implements Initializable {
         initializeSelectedMovie();
         updateLastViewColumn();
 
-
     }
 
 
@@ -128,6 +127,7 @@ public class MainController implements Initializable {
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
 
         if (selectedMovie != null && selectedCategory != null) {
+
             // Display a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
@@ -139,6 +139,7 @@ public class MainController implements Initializable {
                 if (response == ButtonType.OK) {
                     try {
                         // Delete the movie from the model and update the UI
+
                         model.deleteMovieFromCategory(selectedMovie.getId(), selectedCategory.getId());
                         selectedCategory.removeMovie(selectedMovie);
                         updateTable();
@@ -157,8 +158,6 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
-
-
 
 
     public void showAlert() {

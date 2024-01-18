@@ -127,6 +127,7 @@ public class Model {
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);
     }
+
     public void deleteMovieFromCategory(int movieId, int categoryId) throws SQLServerException {
         movieManager.deleteMovieFromCategory( movieId, categoryId);
     }

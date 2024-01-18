@@ -57,6 +57,11 @@ public class MovieManager {
     }
 
 
+    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
+        movieDao.updateMovieLastViewDate(movie, date);
+    }
+
+
 }
 
 

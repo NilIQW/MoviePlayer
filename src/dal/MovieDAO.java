@@ -151,7 +151,6 @@ public  class MovieDAO implements IMovieDAO {
 
     }
 
-
     public void deleteMovie(int movieId, int categoryId) throws SQLServerException {
         System.out.println(movieId);
         try (Connection con = connectionManager.getConnection()) {
