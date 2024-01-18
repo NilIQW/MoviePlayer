@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieDAO implements IMovieDAO {
+public  class MovieDAO implements IMovieDAO{
     private final ConnectionManager connectionManager;
 
     public MovieDAO() throws SQLException {
@@ -130,7 +130,19 @@ public class MovieDAO implements IMovieDAO {
 
         return MoviesInCategory;
     }
-
+    @Override
+    public void updateMovieLastViewDate(Movie movie, LocalDate date) throws SQLServerException {
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "UPDATE Movie SET lastview = ? WHERE id = ?";
+            try (PreparedStatement pt = con.prepareStatement(sql)) {
+                pt.setDate(1, Date.valueOf(date));
+                pt.setInt(2, movie.getId());
+                pt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("An error occurred when updating the last time you watched a movie: " + e.getMessage(), e);
+        }
+    }
     @Override
     public void updateMovieRating(Movie m)throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
@@ -158,5 +170,7 @@ public class MovieDAO implements IMovieDAO {
         }
 
     }
+
+
 }
 

@@ -61,6 +61,7 @@ public class CategoryDAO implements ICategoryDAO {
         return categories;
     }
 
+    @Override
     public void updateCategory(Category category) {
         try (Connection connection = connectionManager.getConnection();
              PreparedStatement statement = connection.prepareStatement("UPDATE Category SET name = ? WHERE id = ?")) {

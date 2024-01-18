@@ -3,6 +3,7 @@ package gui.controller;
 import be.Category;
 import be.Movie;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import dal.MovieDAO;
 import gui.Model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,16 +54,28 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     @FXML
     private Category selectedCategory;
-
+    private MovieDAO movieDAO;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
 
-        //initializeTableviewColumns();
+        initializeTableviewColumns();
         initializeCategorySelection();
         setupSortChangeListener();
         loadCategoriesToListView();
-        initializeSelectedSong();
+        initializeSelectedMovie();
+
+        try {
+            this.movieDAO = new MovieDAO() {
+
+//                public void updateMovieLastViewDate(Movie movie, String date) {
+//
+//                }
+            };
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle MovieDAO initialization error
+        }
     }
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
@@ -90,7 +103,7 @@ public class MainController implements Initializable {
             }
         });
     }
-    public void initializeSelectedSong(){
+    public void initializeSelectedMovie(){
         movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 editMovieRating();
@@ -100,19 +113,20 @@ public class MainController implements Initializable {
     }
 
 
-   /*public void initializeTableviewColumns(){
+    public void initializeTableviewColumns(){
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
 
         updateLastViewColumn();
+
     }
 
     private void updateTableView(List<Movie> movies) {
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
 
-    }*/
+    }
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -200,17 +214,18 @@ public class MainController implements Initializable {
         }
     }
     private void playMovie(String filePath) {
-        try {
-            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
-            if (selectedMovie != null) {
-                selectedMovie.setLastViewDate(LocalDate.now()); // Update last view date
+        Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+        if (selectedMovie != null) {
+            try {
+                selectedMovie.setLastViewDate(LocalDate.now());
+                movieDAO.updateMovieLastViewDate(selectedMovie, LocalDate.now());
                 java.awt.Desktop.getDesktop().open(new File(filePath));
-
-                // Update the TableView if necessary
                 movieTable.refresh();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SQLServerException throwables) {
+                throw new RuntimeException(throwables);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
     public void deleteCategory(ActionEvent actionEvent) { //this method might need additional work
@@ -268,9 +283,7 @@ public class MainController implements Initializable {
         }
 
     }
-    public void test(){
 
-    }
 
 }
 

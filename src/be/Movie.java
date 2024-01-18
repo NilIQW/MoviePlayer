@@ -11,14 +11,18 @@ public class Movie {
     private Category category;
     private LocalDate lastViewDate;
 
-    public Movie(String title, Double rating, String path, LocalDate date){
+    public Movie(String title, Double rating, String path, LocalDate lastView){
         this.title = title;
         this.rating = rating;
         this.path = path;
-        this.date = date;
+        this.date = lastView;
         this.lastViewDate = null;
     }
-
+    public Movie(String title, Double rating, String path){
+        this.title = title;
+        this.rating = rating;
+        this.path = path;
+    }
     public int getId() {
         return id;
     }

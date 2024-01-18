@@ -12,9 +12,12 @@ import java.util.List;
 
 
 public class MovieManager {
-    IMovieDAO movieDao = new MovieDAO();
+    IMovieDAO movieDao = new MovieDAO() {
+
+    };
 
     public MovieManager() throws SQLException {
+
     }
 
     public void createMovie (Movie movie) throws MovieException {
