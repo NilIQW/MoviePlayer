@@ -34,23 +34,22 @@ public class Model {
     static {
         initializeCategories();
     }
+
     private Model() throws SQLException {
         categoryList = DefaultCategories.defaultCategory();
         movieManager = new MovieManager();
         categoryManager = new CategoryManager();
 
     }
+
     public CategoryManager getCategoryManager() {
         return categoryManager;
     }
-    public ObservableList<Category> getCategoryList(){
+
+    public ObservableList<Category> getCategoryList() {
         return categoryList;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of f2ab3a1 (.)
 
     public static Model getInstance() {
         return instance;
@@ -60,9 +59,10 @@ public class Model {
         movieManager.createMovie(newMovie);
 
     }
+
     public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
-        if(!categoryExists(newCategory)) {
+        if (!categoryExists(newCategory)) {
             categoryList.add(newCategory);
             categoryManager.addCategory(newCategory);
         } else {
@@ -75,6 +75,7 @@ public class Model {
             alert.showAndWait();
         }
     }
+
     public boolean categoryExists(Category category) {
         List<Category> existingCategories = categoryList;
 
@@ -85,11 +86,14 @@ public class Model {
         }
         return false;
     }
+
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieManager.addMovieToCategory(category, movie);
     }
+
     /**
      * Retrieves a Category from the categoryList based on its name.
+     *
      * @param categoryName The name of the Category to be retrieved.
      * @return The Category with the specified name.
      */
@@ -124,12 +128,7 @@ public class Model {
     }
 
 
-
-
-
-
 }
-
 
 
 

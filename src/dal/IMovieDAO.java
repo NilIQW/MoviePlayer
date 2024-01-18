@@ -15,4 +15,7 @@ public interface IMovieDAO {
     public void updateMovieRating(Movie m)throws SQLServerException;
     public void updateMovieLastViewDate(Movie movie, LocalDate date)throws SQLServerException;
 
+//    public void deleteMovie(int movieId);
+    public void deleteMovie(int movieId, int categoryId) throws SQLServerException;
+
 }

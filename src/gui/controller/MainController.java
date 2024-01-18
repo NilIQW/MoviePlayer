@@ -67,10 +67,23 @@ public class MainController implements Initializable {
         updateLastViewColumn();
 
 
-
         initializeSelectedMovie();
 
     }
+
+//        try {
+//            this.movieDAO = new MovieDAO() {
+//
+////                public void updateMovieLastViewDate(Movie movie, String date) {
+////
+////                }
+//            };
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+            // Handle MovieDAO initialization error
+        }
+
+
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
         try {
@@ -106,6 +119,29 @@ public class MainController implements Initializable {
 
     }
 
+
+
+    public void initializeTableviewColumns(){
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
+        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
+
+        updateLastViewColumn();
+
+    }
+
+//    public void refreshMovieTableView() throws SQLServerException {
+//        Category category = categoryListview.getSelectionModel().getSelectedItem();
+//        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
+//        updateTableView(list);
+//    }
+
+    private void updateTableView(List<Movie> movies) {
+        movieTable.getItems().clear();
+        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
+        movieTable.setItems(observableMovies);
+    }
+
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -117,8 +153,28 @@ public class MainController implements Initializable {
         stage.show();
     }
 
+
     public void deleteMovieButton(ActionEvent actionEvent) {
     }
+
+    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+
+            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
+            if (selectedMovie != null) {
+                int Id = selectedMovie.getId();
+                System.out.println("Selected Movie ID: " + Id);
+
+                model.deleteMovie(Id);
+//                movieTable.getItems().remove(selectIndex);
+//                refreshMovieTableView();
+  //              updateTable();
+                // Additional actions if needed, such as updating the table
+                movieTable.getItems().clear();
+
+    }
+        }
+
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);

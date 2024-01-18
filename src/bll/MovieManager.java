@@ -48,6 +48,7 @@ public class MovieManager {
         return movieDao.getAllMoviesInCategory(category);
     }
 
+
 }
 
 
