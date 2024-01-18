@@ -47,7 +47,10 @@ public class Model {
         return categoryList;
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f2ab3a1 (.)
 
     public static Model getInstance() {
         return instance;
