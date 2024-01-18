@@ -66,16 +66,7 @@ public class MainController implements Initializable {
         initializeSelectedMovie();
         updateLastViewColumn();
 
-
-
-        initializeSelectedMovie();
-
     }
-
-
-
-
-
 
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
