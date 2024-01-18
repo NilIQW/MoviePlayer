@@ -67,21 +67,14 @@ public class MainController implements Initializable {
         updateLastViewColumn();
 
 
+
         initializeSelectedMovie();
 
     }
 
-//        try {
-//            this.movieDAO = new MovieDAO() {
-//
-////                public void updateMovieLastViewDate(Movie movie, String date) {
-////
-////                }
-//            };
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-            // Handle MovieDAO initialization error
-        }
+
+
+
 
 
     private void loadCategoriesToListView(){
@@ -121,6 +114,7 @@ public class MainController implements Initializable {
 
 
 
+
     public void initializeTableviewColumns(){
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
@@ -154,9 +148,6 @@ public class MainController implements Initializable {
     }
 
 
-    public void deleteMovieButton(ActionEvent actionEvent) {
-    }
-
     public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
 
             Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
@@ -174,6 +165,7 @@ public class MainController implements Initializable {
 
     }
         }
+
 
 
     public void showAlert() {

@@ -47,7 +47,10 @@ public class MovieManager {
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f2ab3a1 (.)
 
 }
 

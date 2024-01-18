@@ -150,6 +150,7 @@ public  class MovieDAO implements IMovieDAO {
         }
 
     }
+<<<<<<< HEAD
 
 //    @Override
 //    public void deleteMovie(int movieId) {
@@ -201,4 +202,8 @@ public  class MovieDAO implements IMovieDAO {
             throw new RuntimeException(e);
         }
     }
+=======
+
+
+>>>>>>> parent of f2ab3a1 (.)
 }

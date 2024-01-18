@@ -59,7 +59,10 @@ public class Model {
         movieManager.createMovie(newMovie);
 
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of f2ab3a1 (.)
     public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
         if (!categoryExists(newCategory)) {
@@ -128,7 +131,18 @@ public class Model {
     }
 
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> parent of f2ab3a1 (.)
 }
 
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of f2ab3a1 (.)
