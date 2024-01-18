@@ -170,7 +170,25 @@ public  class MovieDAO implements IMovieDAO{
         }
 
     }
+    @Override
+    public void deleteMovie(int movieId) {
+        System.out.println(movieId);
+        /*deleteFromCatMovie(movieId);*/
+        try (Connection con = connectionManager.getConnection()) {
+            String sql = "DELETE FROM MovieCategory WHERE MovieId = ?";
+            String sql1 = "DELETE FROM Movie WHERE id = ?";
+            PreparedStatement statement = con.prepareStatement(sql);
+            PreparedStatement statement1 = con.prepareStatement(sql1);
+
+            statement.setInt(1, movieId);
+            statement.executeUpdate();
+            statement1.setInt(1, movieId);
+            statement1.executeUpdate();
 
 
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
 }
 

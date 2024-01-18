@@ -2,6 +2,7 @@ package gui.controller;
 
 import be.Category;
 import be.Movie;
+import bll.MovieManager;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dal.MovieDAO;
 import gui.Model;
@@ -55,6 +56,7 @@ public class MainController implements Initializable {
     @FXML
     private Category selectedCategory;
     private MovieDAO movieDAO;
+    private MovieManager movieManager;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
@@ -99,7 +101,12 @@ public class MainController implements Initializable {
         categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedCategory = newSelection;
-                updateTable();
+
+                try {
+                    updateTable();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
     }
@@ -122,10 +129,16 @@ public class MainController implements Initializable {
 
     }
 
+    public void refreshMovieTableView() throws SQLServerException {
+        Category category = categoryListview.getSelectionModel().getSelectedItem();
+        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
+        updateTableView(list);
+    }
+
     private void updateTableView(List<Movie> movies) {
+        movieTable.getItems().clear();
         ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
         movieTable.setItems(observableMovies);
-
     }
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
@@ -138,8 +151,22 @@ public class MainController implements Initializable {
         stage.show();
     }
 
-    public void deleteMovieButton(ActionEvent actionEvent) {
+    public void deleteMovieButton(ActionEvent actionEvent) throws SQLException {
+
+            Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
+            int selectIndex = movieTable.getSelectionModel().getSelectedIndex();
+            if (selectedMovie != null) {
+                int Id = selectedMovie.getId();
+                System.out.println("Selected Movie ID: " + Id);
+
+                model.deleteMovie(Id);
+//                movieTable.getItems().remove(selectIndex);
+//                refreshMovieTableView();
+                updateTable();
+                // Additional actions if needed, such as updating the table
+
     }
+        }
 
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
@@ -151,12 +178,12 @@ public class MainController implements Initializable {
         alert.showAndWait();
 
     }
-    public void updateTable() {
+    public void updateTable() throws SQLException {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
         if (selectedCategory != null) {
-            for (Movie movie : selectedCategory.getAllMovies()) {
+            for (Movie movie : movieDAO.getAllMoviesInCategory(selectedCategory)) {
                 data.add(movie);
             }
             movieTable.setItems(data);

@@ -37,6 +37,7 @@ public class MovieManager {
         return movie != null && !movie.getTitle().isEmpty() && movie.getRating() >= 0 && !movie.getPath().isEmpty();
 
     }
+
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         movieDao.addMovieToCategory(category, movie);
     }
@@ -48,7 +49,9 @@ public class MovieManager {
     public List<Movie> getAllMoviesInCategory(Category category) throws SQLServerException {
         return movieDao.getAllMoviesInCategory(category);
     }
-
+    public void deleteMovie(int movieId)throws SQLServerException{
+        movieDao.deleteMovie(movieId);
+    }
 }
 
 

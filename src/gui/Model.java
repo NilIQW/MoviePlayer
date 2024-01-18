@@ -101,6 +101,7 @@ public class Model {
             }
         }
         return null;
+
     }
 
 
@@ -129,11 +130,13 @@ public class Model {
     }
 
 
-
-
+    public void deleteMovie(int movieId)throws SQLException{
+       movieManager.deleteMovie(movieId);
+    }
 
 
 }
+
 
 
 
