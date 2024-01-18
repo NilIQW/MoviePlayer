@@ -19,8 +19,9 @@ public class CategoryManager {
         categoryDAO.deleteCategory(id);
     }
 
+
     public List<Category> getAllCategories() throws SQLException {
-        return categoryDAO.getAllCategories();
+            return categoryDAO.getAllCategories();
+        }
     }
 
-}

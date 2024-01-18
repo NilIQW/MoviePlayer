@@ -2,3 +2,13 @@ titleColumn {
     background-color: #ef4a4a;
 
 }
+.list-cell {
+    -fx-background-color: transparent;
+}
+
+.list-view {
+    -fx-background-color: #FF000040;
+}
+.table-cell {
+    -fx-background-color: transparent;
+}

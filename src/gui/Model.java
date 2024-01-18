@@ -29,7 +29,6 @@ public class Model {
         }
     }
 
-    private final static ObservableList<Movie> movieList = FXCollections.observableArrayList();
     private static ObservableList<Category> categoryList;
 
     static {
@@ -47,17 +46,13 @@ public class Model {
     public ObservableList<Category> getCategoryList(){
         return categoryList;
     }
-    public static ObservableList<Movie> returnMovieList() throws SQLException {
-        loadMovies();
-        return movieList;
-    }
+
 
     public static Model getInstance() {
         return instance;
     }
 
     public void createMovie(Movie newMovie) throws MovieException {
-        movieList.add(newMovie);
         movieManager.createMovie(newMovie);
 
     }
@@ -119,10 +114,6 @@ public class Model {
         }
     }
 
-    public static void loadMovies() throws SQLException {
-        movieList.clear();
-        movieList.addAll(movieManager.getAllMovies());
-    }
 
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);

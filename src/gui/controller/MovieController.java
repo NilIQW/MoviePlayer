@@ -50,7 +50,7 @@ public class MovieController implements Initializable {
     private TextField filePath;
     private Model model;
     private MainController mainController;
-
+    private LocalDate lastView;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
@@ -116,7 +116,7 @@ public class MovieController implements Initializable {
 
 
 
-        public void saveMovieButton(ActionEvent actionEvent){
+        public void saveMovieButton(ActionEvent actionEvent) {
             // Retrieve input values
 
             String path = filePath.getText();
@@ -126,7 +126,7 @@ public class MovieController implements Initializable {
 
             try {
                 // Create a Movie object with the provided details
-                Movie myObject = new Movie(title, movieRating, path, lastDate);
+                Movie myObject = new Movie(title, movieRating, path, lastView);
                 model.createMovie(myObject);
                 // Associate the movie with selected categories
                 for (String categoryName : selectedCategoriesList) {
