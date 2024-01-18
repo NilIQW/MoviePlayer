@@ -9,6 +9,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class NewCategoryController implements Initializable {
@@ -19,11 +20,11 @@ public class NewCategoryController implements Initializable {
 
     private Model model;
 
-    public void addCat(ActionEvent event) {
+    public void addCat(ActionEvent event) throws SQLException {
         SaveCategory( event);
 
     }
-    public void SaveCategory(ActionEvent event) {
+    public void SaveCategory(ActionEvent event) throws SQLException {
        model.createCategory(textField.getText());
        textField.clear();
        closeWindow(event);

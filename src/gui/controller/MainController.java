@@ -58,11 +58,11 @@ public class MainController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
 
-        //initializeTableviewColumns();
         initializeCategorySelection();
         setupSortChangeListener();
         loadCategoriesToListView();
         initializeSelectedSong();
+        updateLastViewColumn();
     }
     private void loadCategoriesToListView(){
         categoryListview.setItems(model.getCategoryList());
@@ -98,21 +98,6 @@ public class MainController implements Initializable {
         });
 
     }
-
-
-   /*public void initializeTableviewColumns(){
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
-
-        updateLastViewColumn();
-    }
-
-    private void updateTableView(List<Movie> movies) {
-        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
-        movieTable.setItems(observableMovies);
-
-    }*/
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
@@ -213,7 +198,7 @@ public class MainController implements Initializable {
             e.printStackTrace();
         }
     }
-    public void deleteCategory(ActionEvent actionEvent) { //this method might need additional work
+    public void deleteCategory(ActionEvent actionEvent) throws SQLException { //this method might need additional work
         Category selectedCategory = categoryListview.getSelectionModel().getSelectedItem();
         model.getCategoryManager().deleteCategory(selectedCategory.getId());
         model.getCategoryList().remove(selectedCategory);
@@ -268,10 +253,6 @@ public class MainController implements Initializable {
         }
 
     }
-    public void test(){
-
-    }
-
 }
 
 

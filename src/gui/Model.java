@@ -61,7 +61,7 @@ public class Model {
         movieManager.createMovie(newMovie);
 
     }
-    public void createCategory(String name){
+    public void createCategory(String name) throws SQLException {
         Category newCategory = new Category(name);
         if(!categoryExists(newCategory)) {
             categoryList.add(newCategory);
@@ -109,7 +109,7 @@ public class Model {
         categoryList = FXCollections.observableArrayList(defaultCategories);
     }
 
-    public void loadCategories() throws SQLServerException {
+    public void loadCategories() throws SQLException {
         categoryList.clear();
         categoryList.addAll(categoryManager.getAllCategories());
         //loops through categories and associates them with category, after sets all movies to AllMovies list

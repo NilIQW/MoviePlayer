@@ -148,6 +148,8 @@ public class MovieController implements Initializable {
             } catch (SQLServerException e) {
                 throw new RuntimeException(e);
 
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
 
         }
