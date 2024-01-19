@@ -16,6 +16,7 @@ public class Movie {
         this.rating = rating;
         this.path = path;
         this.date = lastView;
+        this.lastViewDate = lastView;
 
     }
     public Movie(String title, Double rating, String path){

@@ -25,13 +25,13 @@ public  class MovieDAO implements IMovieDAO {
     public void createMovie(Movie m) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
             // Step 1: Define SQL query for inserting a new movie record
-            String sql = "INSERT INTO Movie (name, rating, filelink, lastview)" + "VALUES (?,?,?,?)";
+
+            String sql = "INSERT INTO Movie (name, rating, filelink)" + "VALUES (?,?,?)";
             PreparedStatement pt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             // Step 3: Set parameters for the prepared statement using Movie object values
             pt.setString(1, m.getTitle());
             pt.setDouble(2, m.getRating());
             pt.setString(3, m.getPath());
-            pt.setDate(4, Date.valueOf(java.time.LocalDate.now()));
             pt.execute();
             // Step 5: Retrieve the generated keys (auto-generated primary key)
             try (ResultSet keys = pt.getGeneratedKeys()) {
@@ -86,12 +86,16 @@ public  class MovieDAO implements IMovieDAO {
                         Date sqlDate = rs.getDate("lastview");
 
                         // Convert java.sql.Date to java.time.LocalDate
-                        LocalDate lastView = sqlDate.toLocalDate();
-
-
-                        Movie m = new Movie(title, rating, path, lastView);
-                        m.setId(movieId);
-                        MoviesInCategory.add(m);
+                        if(sqlDate != null) {
+                            LocalDate lastView = sqlDate.toLocalDate();
+                            Movie m = new Movie(title, rating, path, lastView);
+                            m.setId(movieId);
+                            MoviesInCategory.add(m);
+                        }else {
+                            Movie m = new Movie(title, rating, path);
+                            m.setId(movieId);
+                            MoviesInCategory.add(m);
+                        }
                     }
                 }
             }

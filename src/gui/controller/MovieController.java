@@ -100,11 +100,10 @@ public class MovieController implements Initializable {
         String path = filePath.getText();
         String title = movieTitle.getText();
         Double movieRating = rating.getRating();
-        LocalDate lastView = null;
 
         try {
                 // Create a Movie object with the provided details
-                Movie myObject = new Movie(title, movieRating, path, lastView);
+                Movie myObject = new Movie(title, movieRating, path);
                 model.createMovie(myObject);
                 // Associate the movie with selected categories
                 for (String categoryName : selectedCategoriesList) {

@@ -64,7 +64,7 @@ public class MainController implements Initializable {
         setupSortChangeListener();
         loadCategoriesToListView();
         initializeSelectedMovie();
-        updateLastViewColumn();
+
     }
     private void loadCategoriesToListView() {
         categoryListview.setItems(model.getCategoryList());
@@ -157,6 +157,7 @@ public class MainController implements Initializable {
         ObservableList<Movie> data = FXCollections.observableArrayList();
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
+        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
         if (selectedCategory != null) {
             for (Movie movie : selectedCategory.getAllMovies()) {
                 data.add(movie);
@@ -165,22 +166,6 @@ public class MainController implements Initializable {
         }
     }
 
-    private void updateLastViewColumn() {
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
-        lastViewColumn.setCellFactory(column -> new TableCell<Movie, LocalDate>() {
-            @Override
-            protected void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    // Format the date for display
-                    setText(item.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                }
-            }
-        });
-    }
     public void filterButton(ActionEvent actionEvent) throws SQLServerException {
         String filterText = filterTextfield.getText().toLowerCase().trim();
         ObservableList<Movie> filteredMovies = FXCollections.observableArrayList();
