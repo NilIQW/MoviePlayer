@@ -198,17 +198,30 @@ public class MainController implements Initializable {
             playMovie(filepath);
         }
     }
+    /**
+     * Plays the selected movie using the default media player on the system and updates the last view date.
+     * It refreshes the movie table to display the updated last view date.
+     *
+     * @param filePath The path to the movie file to be played.
+     */
     private void playMovie(String filePath) {
+        // Retrieve the selected movie from the movie table
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
         if (selectedMovie != null) {
             try {
+                // Update the last view date of the selected movie to the current date
                 selectedMovie.setLastViewDate(LocalDate.now());
+                // Update the last view date in the database
                 model.updateLastView(selectedMovie, LocalDate.now());
+                // Open the movie file using the default media player on the system
                 java.awt.Desktop.getDesktop().open(new File(filePath));
+                // Refresh the movie table to reflect the updated last view date
                 movieTable.refresh();
             } catch (IOException e) {
+                // Print stack trace in case of an IOException (e.g., file not found or cannot be opened)
                 e.printStackTrace();
             } catch (SQLServerException throwables) {
+                // Throw a runtime exception if there is an issue updating the last view date in the database
                 throw new RuntimeException(throwables);
             }
         }
@@ -234,7 +247,7 @@ public class MainController implements Initializable {
      * Handles sorting of movies based on the selected sort criteria for a specified ObservableList.
      *
      * @param selectedSort The selected sort criteria ("Rating" or "Title").
-     * @param sorting The ObservableList of movies to be sorted.
+     * @param Sorting The ObservableList of movies to be sorted.
      */
     private void handleSort (String selectedSort, ObservableList<Movie> Sorting){
 

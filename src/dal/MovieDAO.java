@@ -105,16 +105,28 @@ public  class MovieDAO implements IMovieDAO {
 
         return MoviesInCategory;
     }
+    /**
+     * Updates the last viewed date of a specific movie in the database.
+     *
+     * @param movie The Movie object whose last view date needs to be updated.
+     * @param date The new last viewed date to be set for the movie.
+     * @throws SQLServerException If there is an issue with the SQL Server database connectivity.
+     */
     @Override
     public void updateMovieLastViewDate(Movie movie, LocalDate date) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
+            // SQL query to update the 'lastview' column for a specific movie based on its ID
             String sql = "UPDATE Movie SET lastview = ? WHERE id = ?";
             try (PreparedStatement pt = con.prepareStatement(sql)) {
+                // Setting the date in the prepared statement
                 pt.setDate(1, Date.valueOf(date));
+                // Setting the movie ID in the prepared statement
                 pt.setInt(2, movie.getId());
+                // Executing the update query
                 pt.executeUpdate();
             }
         } catch (SQLException e) {
+            // Throwing a RuntimeException if there's an SQL error, with a message for clarity
             throw new RuntimeException("An error occurred when updating the last time you watched a movie: " + e.getMessage(), e);
         }
     }
@@ -146,31 +158,38 @@ public  class MovieDAO implements IMovieDAO {
         }
 
     }
+    /**
+     * Deletes a movie from a specific category. If the movie is not associated with any other categories,
+     * it is also removed from the Movie table.
+     *
+     * @param movieId The ID of the movie to be deleted.
+     * @param categoryId The ID of the category from which the movie should be removed.
+     * @throws SQLServerException If there is an issue with the SQL Server database connectivity.
+     */
     public void deleteMovie(int movieId, int categoryId) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
-            // Delete the movie from the specific category
+            // SQL query to delete the movie from the MovieCategory table
             String sql = "DELETE FROM MovieCategory WHERE MovieId = ? AND CategoryId = ?";
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1, movieId);
             statement.setInt(2, categoryId);
             statement.executeUpdate();
 
-
-            // Check if the movie is associated with any other categories
+            // SQL query to check if the movie is associated with any other categories
             String checkSql = "SELECT COUNT(*) FROM MovieCategory WHERE MovieId = ?";
             PreparedStatement checkStatement = con.prepareStatement(checkSql);
             checkStatement.setInt(1, movieId);
             ResultSet resultSet = checkStatement.executeQuery();
 
-            // If the movie is not associated with any other categories, delete from the Movie table
+            // If the movie is not associated with any other categories, delete it from the Movie table
             if (resultSet.next() && resultSet.getInt(1) == 0) {
                 String deleteMovieSql = "DELETE FROM Movie WHERE id = ?";
                 PreparedStatement deleteMovieStatement = con.prepareStatement(deleteMovieSql);
                 deleteMovieStatement.setInt(1, movieId);
                 deleteMovieStatement.executeUpdate();
             }
-
         } catch (SQLException e) {
+            // Throwing a RuntimeException if there's an SQL error, with a message for clarity
             throw new RuntimeException(e);
         }
     }
