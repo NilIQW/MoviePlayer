@@ -49,7 +49,6 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
     private Model model;
-    private LocalDate lastView;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
