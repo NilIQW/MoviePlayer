@@ -55,7 +55,7 @@ public class MainController implements Initializable {
     private String[] sorting = {"Rating", "Title"};
     @FXML
     private Category selectedCategory;
-    private MovieDAO movieDAO;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
@@ -65,13 +65,10 @@ public class MainController implements Initializable {
         loadCategoriesToListView();
         initializeSelectedMovie();
         updateLastViewColumn();
-
     }
-
-    private void loadCategoriesToListView(){
+    private void loadCategoriesToListView() {
         categoryListview.setItems(model.getCategoryList());
         try {
-
             model.loadCategories();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -79,14 +76,13 @@ public class MainController implements Initializable {
     }
     private void setupSortChangeListener() {
         sort.getItems().addAll(sorting);
-
         sort.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 handleSort(newValue);
             }
         });
     }
-    public void initializeCategorySelection(){
+    public void initializeCategorySelection() {
         categoryListview.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 selectedCategory = newSelection;
@@ -94,56 +90,29 @@ public class MainController implements Initializable {
             }
         });
     }
-    public void initializeSelectedMovie(){
+    public void initializeSelectedMovie() {
         movieTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection != null) {
                 editMovieRating();
             }
         });
-
     }
-
-
-
-
-    public void initializeTableviewColumns(){
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        ratingColumn.setCellValueFactory(new PropertyValueFactory<>("rating"));
-        lastViewColumn.setCellValueFactory(new PropertyValueFactory<>("lastViewDate"));
-
-        updateLastViewColumn();
-
-    }
-
-//    public void refreshMovieTableView() throws SQLServerException {
-//        Category category = categoryListview.getSelectionModel().getSelectedItem();
-//        List<Movie> list = movieDAO.getAllMoviesInCategory(category);
-//        updateTableView(list);
-//    }
-
-    private void updateTableView(List<Movie> movies) {
-        movieTable.getItems().clear();
-        ObservableList<Movie> observableMovies = FXCollections.observableArrayList(movies);
-        movieTable.setItems(observableMovies);
-    }
-
     public void addMovieButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/Movie.fxml"));
         Parent root = loader.load();
         MovieController movieController = loader.getController();
-        movieController.setMainController(this);
         Stage stage = new Stage();
         stage.setTitle("Media Player");
         stage.setScene(new Scene(root));
         stage.show();
     }
 
-
     public void deleteMovieButton(ActionEvent actionEvent) {
         // Get the selected movie
         Movie selectedMovie = movieTable.getSelectionModel().getSelectedItem();
 
-        if (selectedMovie != null) {
+        if (selectedMovie != null && selectedCategory != null) {
+
             // Display a confirmation dialog
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Confirm Deletion");
@@ -155,7 +124,8 @@ public class MainController implements Initializable {
                 if (response == ButtonType.OK) {
                     try {
                         // Delete the movie from the model and update the UI
-                        model.deleteMovie(selectedMovie.getId());
+
+                        model.deleteMovieFromCategory(selectedMovie.getId(), selectedCategory.getId());
                         selectedCategory.removeMovie(selectedMovie);
                         updateTable();
                     } catch (SQLException e) {
@@ -173,9 +143,6 @@ public class MainController implements Initializable {
             alert.showAndWait();
         }
     }
-
-
-
     public void showAlert() {
         Alert alert = new Alert(Alert.AlertType.NONE, "Please delete the movies under 2.5 rating and/or haven't been opened in 2 years", ButtonType.OK);
         alert.setTitle("Attention");
@@ -251,7 +218,7 @@ public class MainController implements Initializable {
         if (selectedMovie != null) {
             try {
                 selectedMovie.setLastViewDate(LocalDate.now());
-                movieDAO.updateMovieLastViewDate(selectedMovie, LocalDate.now());
+                model.updateLastView(selectedMovie, LocalDate.now());
                 java.awt.Desktop.getDesktop().open(new File(filePath));
                 movieTable.refresh();
             } catch (IOException e) {
@@ -311,8 +278,6 @@ public class MainController implements Initializable {
         selectedMovie.setText(selectedM.getTitle());
         selectedMovieRating.setRating(selectedM.getRating());
     }
-
-
     public void changeRatingButton(ActionEvent actionEvent) throws SQLServerException {
 
             Movie selectedM = movieTable.getSelectionModel().getSelectedItem();
@@ -330,14 +295,10 @@ public class MainController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Select movie");
                 alert.showAndWait();
             }
-
-
     }
-
-
     private void resetSelectedMovieInformation() {
         selectedMovie.setText("");
-        selectedMovieRating.setRating(0); // Assuming Rating control supports setting to 0
+        selectedMovieRating.setRating(0);
     }
 
 

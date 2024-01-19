@@ -24,10 +24,9 @@ public class Category {
     public List<Movie> getAllMovies(){
         return allMovies;
     }
-    public void addMovie (Movie movie){
-        allMovies.add(movie);
+    public void removeMovie(Movie movie) {
+        this.allMovies.remove(movie);
     }
-
 
     public int getId() {
         return id;
@@ -45,20 +44,9 @@ public class Category {
         this.name = name;
     }
 
-
-
     @Override
     public String toString() {
         return name;
     }
 
-    public void removeMovie(Movie movie) {
-        // Assuming you have a list of movies in your Category class
-        List<Movie> movies = getAllMovies();
-
-        // Remove the specified movie from the list
-        movies.remove(movie);
-
-
-    }
 }

@@ -49,38 +49,24 @@ public class MovieController implements Initializable {
     @FXML
     private TextField filePath;
     private Model model;
-    private MainController mainController;
     private LocalDate lastView;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();
-        selectedCategories.setItems(selectedCategoriesList);
 
+        selectedCategories.setItems(selectedCategoriesList);
         categoryChoice.setItems(model.getCategoryList());
         categoryChoice.setValue(model.getCategoryList().get(0));
-
-       // MainController controller = new MainController();
-
-
     }
-
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-    }
-
     public void newCategoryButton(ActionEvent actionEvent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/view/NewCategoryView.fxml"));
         Parent root = loader.load();
-        // ((NewCategoryController) loader.getController()).setCategories();
         Stage newCategoryStage = new Stage();
         newCategoryStage.setTitle("");
         newCategoryStage.setScene(new Scene(root));
         newCategoryStage.setResizable(false);
         newCategoryStage.show();
-
     }
-
-
     public void addCategoryButton(ActionEvent actionEvent) {
 
         Category selectedCategory = (Category) categoryChoice.getSelectionModel().getSelectedItem();
@@ -90,13 +76,9 @@ public class MovieController implements Initializable {
         } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "This category already exists in the selected categories");
             alert.showAndWait();
-
         }
-
     }
-
     public void removeCategoryButton(ActionEvent actionEvent) {
-
         String selectedCategory = (String) selectedCategories.getSelectionModel().getSelectedItem();
         if (selectedCategory != null) {
             selectedCategoriesList.remove(selectedCategory);
@@ -113,18 +95,15 @@ public class MovieController implements Initializable {
             movieTitle.setText(selectedFile.getName());
         }
     }
-
-
-
-        public void saveMovieButton(ActionEvent actionEvent) {
+    public void saveMovieButton(ActionEvent actionEvent) {
             // Retrieve input values
 
-            String path = filePath.getText();
-            String title = movieTitle.getText();
-            Double movieRating = rating.getRating();
-            LocalDate lastDate = LocalDate.now();
+        String path = filePath.getText();
+        String title = movieTitle.getText();
+        Double movieRating = rating.getRating();
+        LocalDate lastView = null;
 
-            try {
+        try {
                 // Create a Movie object with the provided details
                 Movie myObject = new Movie(title, movieRating, path, lastView);
                 model.createMovie(myObject);

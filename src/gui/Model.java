@@ -127,12 +127,16 @@ public class Model {
     public void updateMovieRating(Movie movie) throws SQLServerException {
         movieManager.updateMovieRating(movie);
     }
-    public void deleteMovie(int movieId)throws SQLException{
-        movieManager.deleteMovie(movieId);
+
+    public void deleteMovieFromCategory(int movieId, int categoryId) throws SQLServerException {
+        movieManager.deleteMovieFromCategory( movieId, categoryId);
     }
-    public void updateView(Movie movie, LocalDate date) throws SQLServerException {
-        movieManager.updateView(movie, date);
+
+    public void updateLastView(Movie movie, LocalDate date) throws SQLServerException {
+        movieManager.updateMovieView(movie, date);
     }
+
+
 }
 
 

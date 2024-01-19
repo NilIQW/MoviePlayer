@@ -17,12 +17,9 @@ public class NewCategoryController implements Initializable {
     private Button closeButton;
     @FXML
     private TextField textField;
-
     private Model model;
-
     public void addCat(ActionEvent event) throws SQLException {
-        SaveCategory( event);
-
+        SaveCategory(event);
     }
     public void SaveCategory(ActionEvent event) throws SQLException {
        model.createCategory(textField.getText());
@@ -30,12 +27,10 @@ public class NewCategoryController implements Initializable {
        closeWindow(event);
 
     }
-
     public void closeWindow(ActionEvent event) {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         model = Model.getInstance();

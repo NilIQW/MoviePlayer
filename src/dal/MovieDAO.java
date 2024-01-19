@@ -16,8 +16,6 @@ public  class MovieDAO implements IMovieDAO {
         this.connectionManager = new ConnectionManager();
 
     }
-
-
     /**
      * Creates a new movie record in the database.
      *
@@ -47,9 +45,7 @@ public  class MovieDAO implements IMovieDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
     @Override
     public void addMovieToCategory(Category category, Movie movie) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
@@ -63,8 +59,6 @@ public  class MovieDAO implements IMovieDAO {
             throw new RuntimeException(e);
         }
     }
-
-
     /**
      * Retrieves a list of movies in a specific category from the database.
      *
@@ -107,7 +101,6 @@ public  class MovieDAO implements IMovieDAO {
 
         return MoviesInCategory;
     }
-
     @Override
     public void updateMovieLastViewDate(Movie movie, LocalDate date) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
@@ -121,7 +114,6 @@ public  class MovieDAO implements IMovieDAO {
             throw new RuntimeException("An error occurred when updating the last time you watched a movie: " + e.getMessage(), e);
         }
     }
-
     @Override
     public void updateMovieRating(Movie m) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
@@ -150,24 +142,32 @@ public  class MovieDAO implements IMovieDAO {
         }
 
     }
-
-    @Override
-    public void deleteMovie(int movieId) {
-
+    public void deleteMovie(int movieId, int categoryId) throws SQLServerException {
         try (Connection con = connectionManager.getConnection()) {
-            String sql = "DELETE FROM MovieCategory WHERE MovieId = ?";
-            String sql1 = "DELETE FROM Movie WHERE id = ?";
+            // Delete the movie from the specific category
+            String sql = "DELETE FROM MovieCategory WHERE MovieId = ? AND CategoryId = ?";
             PreparedStatement statement = con.prepareStatement(sql);
-            PreparedStatement statement1 = con.prepareStatement(sql1);
-
             statement.setInt(1, movieId);
+            statement.setInt(2, categoryId);
             statement.executeUpdate();
-            statement1.setInt(1, movieId);
-            statement1.executeUpdate();
 
 
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            // Check if the movie is associated with any other categories
+            String checkSql = "SELECT COUNT(*) FROM MovieCategory WHERE MovieId = ?";
+            PreparedStatement checkStatement = con.prepareStatement(checkSql);
+            checkStatement.setInt(1, movieId);
+            ResultSet resultSet = checkStatement.executeQuery();
+
+            // If the movie is not associated with any other categories, delete from the Movie table
+            if (resultSet.next() && resultSet.getInt(1) == 0) {
+                String deleteMovieSql = "DELETE FROM Movie WHERE id = ?";
+                PreparedStatement deleteMovieStatement = con.prepareStatement(deleteMovieSql);
+                deleteMovieStatement.setInt(1, movieId);
+                deleteMovieStatement.executeUpdate();
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

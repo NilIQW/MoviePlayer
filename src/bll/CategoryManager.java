@@ -9,17 +9,12 @@ import java.util.List;
 
 public class CategoryManager {
     ICategoryDAO categoryDAO = new CategoryDAO();
-
     public void addCategory(Category category) throws SQLException {
         categoryDAO.saveCategory(category);
-
     }
-
     public void deleteCategory(int id) throws SQLException {
         categoryDAO.deleteCategory(id);
     }
-
-
     public List<Category> getAllCategories() throws SQLException {
             return categoryDAO.getAllCategories();
         }

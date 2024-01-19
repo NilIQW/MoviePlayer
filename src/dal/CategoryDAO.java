@@ -11,7 +11,6 @@ import java.util.List;
 
 public class CategoryDAO implements ICategoryDAO {
     private final ConnectionManager connectionManager;
-
     public CategoryDAO(){
         this.connectionManager = new ConnectionManager();
     }
@@ -25,7 +24,7 @@ public class CategoryDAO implements ICategoryDAO {
 
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    int id = generatedKeys.getInt(1);  // Extract the generated ID from the result set
+                    int id = generatedKeys.getInt(1);
                     category.setId(id);
                 }
             }
@@ -58,10 +57,6 @@ public class CategoryDAO implements ICategoryDAO {
 
         return categories;
     }
-
-
-
-
     public void deleteCategory(int categoryId) throws SQLException {
 
         try (Connection connection = connectionManager.getConnection();
@@ -74,6 +69,5 @@ public class CategoryDAO implements ICategoryDAO {
             throw new SQLException("Category wasn't deleted, try again", e);
         }
     }
-
 
 }
