@@ -10,14 +10,11 @@ import java.util.Objects;
 public class Category {
     private List<Movie> allMovies;
     private int id;
-
     private String name;
-
     public Category(String name){
         this.allMovies = new ArrayList<Movie>();
         this.name = name;
     }
-
     public void setAllMovies(List<Movie> movies) {
         this.allMovies = movies;
     }
